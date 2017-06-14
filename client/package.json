@@ -1,0 +1,22 @@
+{
+  "name": "client",
+  "version": "1.0.0",
+  "description": "",
+  "main": "webpack.config.js",
+  "scripts": {
+    "start": "webpack -w"
+  },
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "babel-core": "^6.25.0",
+    "babel-loader": "^7.0.0",
+    "babel-preset-react": "^6.24.1",
+    "mocha": "^2.4.5",
+    "webpack": "^2.2.0"
+  },
+  "dependencies": {
+    "react": "^15.6.0",
+    "react-dom": "^15.6.0"
+  }
+}
