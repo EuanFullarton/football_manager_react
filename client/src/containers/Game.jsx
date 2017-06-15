@@ -10,6 +10,7 @@ class Game extends React.Component {
       team1Score: 0,
       team2Score: 0,
       teamInPossession: "",
+      defendingTeam: "",
       playerInPossession: ""
     }
     this.sendHTTPRequest = this.sendHTTPRequest.bind(this);
@@ -22,6 +23,7 @@ class Game extends React.Component {
       team1Score: 0,
       team2Score: 0,
       teamInPossession: "",
+      defendingTeam: "",
       playerInPossession: ""
     }
   }
@@ -46,43 +48,78 @@ class Game extends React.Component {
 
   setTeamInPossession(){
     const teams = this.state.teams;
-    const teamWithPossession = teams[Math.round(Math.random())]
-    this.setState({teamInPossession: teamWithPossession}, () => { 
+    let teamWithPossession = teams[Math.round(Math.random())];
+    let defendingTeam = "";
+    if (teamWithPossession === teams[0]){
+      defendingTeam = teams[1];
+    }
+    else {
+      defendingTeam = teams[0];
+    }
+
+    this.setState({teamInPossession: teamWithPossession, defendingTeam: defendingTeam}, () => { 
       console.log("Team in possession: ", this.state.teamInPossession), 
+      console.log("Defending team: ", this.state.defendingTeam), 
       this.setPlayerinPossession() 
     });
   }
 
   setPlayerinPossession(){
     const players = this.state.teamInPossession.players;
-    const playerWithPossession = players[(Math.floor(Math.random() * 10) + 1)]
+    const defendingPlayers = this.state.defendingTeam.players;
+    let playerWithPossession = players[(Math.floor(Math.random() * 10) + 1)];
+    let defendingPlayer = defendingPlayers[(Math.floor(Math.random() * 10) + 1)];
 
     this.setState({playerInPossession: playerWithPossession}, () => {
       console.log("Player who has the ball: ", this.state.playerInPossession)
-      const thisPlayer = new Player();
-      const playerToPassTo = players[(Math.floor(Math.random() * 10) + 1)]
+      let thisPlayer = new Player();
+      let playerToPassTo = players[(Math.floor(Math.random() * 10) + 1)]
 
       thisPlayer.makeMove(this.state.playerInPossession.name);
       thisPlayer.makeMove("He");
       thisPlayer.attemptPass(this.state.playerInPossession.name, playerToPassTo.name);
+
+      this.passSuccess(playerToPassTo, defendingPlayer);
     })
   }
 
-  gameStart(){
-    this.setTeamInPossession();
-  }
+  passSuccess(receivingPlayer, defendingPlayer){
+    console.log("Player's pass rating: ", this.state.playerInPossession.attributes[0].Passing);
+    console.log("Defender's positioning rating: ", defendingPlayer.attributes[0].Positioning);
+    console.log("Defender's tackling rating: ", defendingPlayer.attributes[0].Tackling);
+    console.log("Defender's pace rating: ", defendingPlayer.attributes[0].Pace);
+    console.log("Defender's strength rating: ", defendingPlayer.attributes[0].Strength);
+    console.log("Receiving player's pace rating: ", receivingPlayer.attributes[0].Pace);
+    console.log("Receiving player's strength rating: ", receivingPlayer.attributes[0].Strength);
+    console.log("Receiving player's dribbling rating: ", receivingPlayer.attributes[0].Dribbling);
 
-  render(){
-    return(
-      <div>
-      <h1>Footsoccerpassball</h1>
-      <p>Go to /game to view the data!</p>
-      <StartGame 
-      startGame={this.gameStart.bind(this)}/>
-      </div>
-      )
-  }
 
-}
+    //if att pass > def positioning then pass success
+    //if att pass == def positioning then
+      // random between:
+        // receiving strength vs def strength
+        // receiving pace vs def pace
+        // receiving dribbling vs def tackling
 
-export default Game;
+    //if pass unsuccessful then change of possession
+
+      }
+
+      gameStart(){
+        this.setTeamInPossession();
+      }
+
+      render(){
+        return(
+          <div>
+          <h1>Footsoccerpassball</h1>
+          <p>Go to /game to view the data!</p>
+          <StartGame 
+          startGame={this.gameStart.bind(this)}/>
+          </div>
+          )
+      }
+
+    }
+
+    export default Game;
