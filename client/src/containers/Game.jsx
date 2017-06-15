@@ -51,7 +51,8 @@ class Game extends React.Component {
 
   setTeamInPossession(){
     const teams = this.state.teams;
-    this.setState({teamInPossession: teams[0]}, () => {console.log("setState is done", this.state.teamInPossession)});
+    const teamWithPossession = teams[Math.round(Math.random())]
+    this.setState({teamInPossession: teamWithPossession}, () => {console.log("setState is done", this.state.teamInPossession)});
   }
 
   gameStart(){
