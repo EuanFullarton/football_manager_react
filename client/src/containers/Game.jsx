@@ -28,19 +28,15 @@ class Game extends React.Component {
   }
 
   sendHTTPRequest(url) {
-    console.log('sendHTTPRequest running')
     const request = new XMLHttpRequest();
     request.open('GET', url);
     request.onload = () => {
       if(request.status === 200){
-        console.log('request.status === 200')
         const teams = JSON.parse(request.responseText);
         const team1 = teams[0];
         const team2 = teams[1];
-        console.log('Team1: ', teams[0]);
-        console.log('Team2: ', teams[1]);
         this.setState({teams: [team1, team2]});
-        console.log('Teams in state: ', this.state.teams[0].name, ",", this.state.teams[1].name)
+        console.log('Teams: ', this.state.teams[0].name, "vs", this.state.teams[1].name)
       }
       else{
         console.log('request.status !== 200')
@@ -52,12 +48,23 @@ class Game extends React.Component {
   setTeamInPossession(){
     const teams = this.state.teams;
     const teamWithPossession = teams[Math.round(Math.random())]
-    this.setState({teamInPossession: teamWithPossession}, () => {console.log("setState is done", this.state.teamInPossession)});
+    this.setState({teamInPossession: teamWithPossession}, () => { 
+      console.log("Team in possession: ", this.state.teamInPossession), 
+      this.setPlayerinPossession() 
+    });
+  }
+
+  setPlayerinPossession(){
+    const players = this.state.teamInPossession.players;
+    const playerWithPossession = players[(Math.floor(Math.random() * 10) + 1)]
+    this.setState({playerInPossession: playerWithPossession}, () => {
+      console.log("Player who has the ball: ", this.state.playerInPossession)
+    })
   }
 
   gameStart(){
     this.setTeamInPossession();
-    console.log('Game start, team in possession: ', this.state.teamInPossession)
+    //this.setPlayerinPossession();
   }
 
   render(){
