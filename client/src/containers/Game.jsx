@@ -1,6 +1,5 @@
 import React from 'react';
 import Player from '../components/Player';
-import Team from '../components/Team';
 import StartGame from '../components/StartGame.jsx'
 
 class Game extends React.Component {
@@ -33,8 +32,8 @@ class Game extends React.Component {
     request.onload = () => {
       if(request.status === 200){
         const teams = JSON.parse(request.responseText);
-        const team1 = teams[0];
-        const team2 = teams[1];
+        const team1 = teams[0].teams[0];
+        const team2 = teams[0].teams[1];
         this.setState({teams: [team1, team2]});
         console.log('Teams: ', this.state.teams[0].name, "vs", this.state.teams[1].name)
       }
@@ -64,7 +63,6 @@ class Game extends React.Component {
 
   gameStart(){
     this.setTeamInPossession();
-    //this.setPlayerinPossession();
   }
 
   render(){
