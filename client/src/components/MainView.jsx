@@ -25,7 +25,8 @@ class MainView extends React.Component {
   render(){
     return(
       <div>
-      {this.teams}
+      <h1>Footsoccerpassball</h1>
+      <p>Go to /game to view the data!</p>
       </div>
       )
   }
