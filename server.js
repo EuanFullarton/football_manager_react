@@ -1,10 +1,21 @@
 var express = require('express');
 var app = express();
-var path = require('path')
+var path = require('path');
+var fs = require('fs');
+var TEAMS_JSON = path.join(__dirname, 'data/teams.json');
 
 app.get('/', function (req, res) {
   res.sendFile(path.join(__dirname + '/client/build/index.html'));
 });
+
+app.get('/game', function(req, res){
+  fs.readFile(TEAMS_JSON, function(err, data){
+    if(err) process.exit(1);
+
+    res.json(JSON.parse(data));
+  })
+})
+
 
 app.use(express.static('client/build'));
 
