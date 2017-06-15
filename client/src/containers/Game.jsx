@@ -1,5 +1,5 @@
 import React from 'react';
-import Player from '../components/Player';
+import player from '../models/player';
 import StartGame from '../components/StartGame.jsx'
 
 class Game extends React.Component {
@@ -58,6 +58,7 @@ class Game extends React.Component {
     const playerWithPossession = players[(Math.floor(Math.random() * 10) + 1)]
     this.setState({playerInPossession: playerWithPossession}, () => {
       console.log("Player who has the ball: ", this.state.playerInPossession)
+      player.makeMove();
     })
   }
 
