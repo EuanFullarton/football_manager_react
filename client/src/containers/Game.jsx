@@ -1,6 +1,7 @@
 import React from 'react';
 import Player from '../components/Player';
 import Team from '../components/Team';
+import StartGame from '../components/StartGame.jsx'
 
 class Game extends React.Component {
   constructor(props){
@@ -13,7 +14,6 @@ class Game extends React.Component {
       playerInPossession: ""
     }
     this.sendHTTPRequest = this.sendHTTPRequest.bind(this);
-    console.log(this.state)
     this.sendHTTPRequest('/game');
   }
 
@@ -35,24 +35,28 @@ class Game extends React.Component {
       if(request.status === 200){
         console.log('request.status === 200')
         const teams = JSON.parse(request.responseText);
-        console.log('Team1: ', teams[0].name);
-        console.log('Team2: ', teams[1].name);
-        this.setState({teams: teams});
+        const team1 = teams[0];
+        const team2 = teams[1];
+        console.log('Team1: ', teams[0]);
+        console.log('Team2: ', teams[1]);
+        this.setState({teams: [team1, team2]});
+        console.log('Teams in state: ', this.state.teams[0].name, ",", this.state.teams[1].name)
       }
       else{
         console.log('request.status !== 200')
       }
     };
-    console.log('Teams: ', this.state.teams)
     request.send(null);
   }
 
   setTeamInPossession(){
-    //define teams
-    console.log(this);
-    // const teams = [team1, team2];
-    // this.setState({teamInPossession: teams[Math.random().round()]});
-    // console.log('Team in possession: ', this.state.teamInPossession)
+    const teams = this.state.teams;
+    this.setState({teamInPossession: teams[0]}, () => {console.log("setState is done", this.state.teamInPossession)});
+  }
+
+  gameStart(){
+    this.setTeamInPossession();
+    console.log('Game start, team in possession: ', this.state.teamInPossession)
   }
 
   render(){
@@ -60,9 +64,12 @@ class Game extends React.Component {
       <div>
       <h1>Footsoccerpassball</h1>
       <p>Go to /game to view the data!</p>
+      <StartGame 
+      startGame={this.gameStart.bind(this)}/>
       </div>
       )
   }
+
 }
 
 export default Game;
