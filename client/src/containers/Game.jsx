@@ -1,5 +1,5 @@
 import React from 'react';
-import Player from '../models/Player';
+import Player from '../components/Player';
 import StartGame from '../components/StartGame.jsx'
 
 class Game extends React.Component {
@@ -84,14 +84,42 @@ class Game extends React.Component {
   }
 
   passSuccess(receivingPlayer, defendingPlayer){
-    console.log("Player's pass rating: ", this.state.playerInPossession.attributes[0].Passing);
-    console.log("Defender's positioning rating: ", defendingPlayer.attributes[0].Positioning);
-    console.log("Defender's tackling rating: ", defendingPlayer.attributes[0].Tackling);
-    console.log("Defender's pace rating: ", defendingPlayer.attributes[0].Pace);
-    console.log("Defender's strength rating: ", defendingPlayer.attributes[0].Strength);
-    console.log("Receiving player's pace rating: ", receivingPlayer.attributes[0].Pace);
-    console.log("Receiving player's strength rating: ", receivingPlayer.attributes[0].Strength);
-    console.log("Receiving player's dribbling rating: ", receivingPlayer.attributes[0].Dribbling);
+    let playerPassRating = this.state.playerInPossession.attributes[0].Passing;
+    let defenderPositioning = defendingPlayer.attributes[0].Positioning;
+    let defenderTackling = defendingPlayer.attributes[0].Tackling;
+    let defenderPace = defendingPlayer.attributes[0].Pace;
+    let defenderStrength = defendingPlayer.attributes[0].Strength;
+    let receiverDribbling = receivingPlayer.attributes[0].Dribbling;
+    let receiverPace = receivingPlayer.attributes[0].Pace;
+    let receiverStrength = receivingPlayer.attributes[0].Strength;
+
+    // console.log("Player's pass rating: ", playerPassRating);
+    // console.log("Defender's positioning rating: ", defenderPositioning);
+    // console.log("Defender's tackling rating: ", defenderTackling);
+    // console.log("Defender's pace rating: ", defenderPace);
+    // console.log("Defender's strength rating: ", defenderStrength);
+    // console.log("Receiving player's dribbling rating: ", receiverDribbling);
+    // console.log("Receiving player's pace rating: ", receiverPace);
+    // console.log("Receiving player's strength rating: ", receiverStrength);
+
+    if (playerPassRating > defenderPositioning){
+      console.log("Pass successful!")
+    }
+    else if (playerPassRating === defenderPositioning){
+      const challenges = [(receiverPace > defenderPace), (receiverStrength > defenderStrength), (receiverDribbling > defenderTackling)];
+      let makeChallenge = challenges[(Math.floor(Math.random() * 3))];
+      console.log("Challenging for ball!: ", makeChallenge);
+
+      if (makeChallenge === true){
+        console.log("Pass successful!")
+      }
+      else {
+        console.log("Pass unsuccessful, ball taken by ", defendingPlayer.name)
+      }
+    }
+    else {
+      console.log("Pass unsuccessful, ball taken by ", defendingPlayer.name)
+    }
 
 
     //if att pass > def positioning then pass success
@@ -103,23 +131,23 @@ class Game extends React.Component {
 
     //if pass unsuccessful then change of possession
 
-      }
+  }
 
-      gameStart(){
-        this.setTeamInPossession();
-      }
+  gameStart(){
+    this.setTeamInPossession();
+  }
 
-      render(){
-        return(
-          <div>
-          <h1>Footsoccerpassball</h1>
-          <p>Go to /game to view the data!</p>
-          <StartGame 
-          startGame={this.gameStart.bind(this)}/>
-          </div>
-          )
-      }
+  render(){
+    return(
+      <div>
+      <h1>Footsoccerpassball</h1>
+      <p>Go to /game to view the data!</p>
+      <StartGame 
+      startGame={this.gameStart.bind(this)}/>
+      </div>
+      )
+  }
 
-    }
+}
 
-    export default Game;
+export default Game;
