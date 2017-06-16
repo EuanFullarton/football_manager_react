@@ -5,7 +5,7 @@ class Shot {
     const goalkeeperReflexes = goalkeeper.attributes[0].Reflexes;
     const goalkeeperHandling = goalkeeper.attributes[0].Handling;
     const goalkeeperPositioning = goalkeeper.attributes[0].Positioning;
-  
+
     if (playerShootingRating > goalkeeperReflexes){
       console.log("It's a goal, there was no stopping that!");
       console.log(playerInPossession.name + " is the scorer");
@@ -31,6 +31,7 @@ class Shot {
     }
     else {
       console.log("Incredible reflex save by the keeper!");
+      return [false];
     }
 
 

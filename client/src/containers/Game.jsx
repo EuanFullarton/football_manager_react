@@ -11,6 +11,8 @@ class Game extends React.Component {
       teams: [],
       team1Score: 0,
       team2Score: 0,
+      team1Scorers: [],
+      team2Scorers: [],
       teamInPossession: "",
       defendingTeam: "",
       playerInPossession: ""
@@ -24,6 +26,8 @@ class Game extends React.Component {
       teams:[],
       team1Score: 0,
       team2Score: 0,
+      team1Scorers: [],
+      team2Scorers: [],
       teamInPossession: "",
       defendingTeam: "",
       playerInPossession: ""
@@ -76,17 +80,18 @@ class Game extends React.Component {
     this.setState({playerInPossession: playerWithPossession}, () => {
       console.log(playerWithPossessionName + " has the ball")
       const thisPlayer = new Player();
+      
       //ensuring that player in possession cannot pass to themselves, removing them from the players array
       const indexOfPlayerWithPossession = players.indexOf(playerWithPossession)
       let removedPlayer = players.splice(indexOfPlayerWithPossession, 1);
       let playerToPassTo = players[(Math.floor(Math.random() * 9) + 1)]
-      //adding the player back into the array
 
       //this for when attackingMove() calls the function
       if (playerToPassTo === playerWithPossession){
         playerToPassTo = players[(Math.floor(Math.random() * 9) + 1)]
       }
 
+      //adding the player back into the array
       players.push(removedPlayer[0])
 
       const playerToPassToName = playerToPassTo.name
@@ -131,11 +136,17 @@ class Game extends React.Component {
 
   takeShot(playerInPossession, goalkeeper){
     const thisShot = new Shot();
-    const shotResult = (thisShot.shotSuccess(playerInPossession, goalkeeper), () => {
-      console.log("shotSuccess returning: ", shotResult);
-    });
-
-    //next step is to update the score (add it to state first), and add scorer to array of goalscorers
+    const shotResult = thisShot.shotSuccess(playerInPossession, goalkeeper);
+    if ((shotResult[0] === true) &&(this.state.teamInPossession.name === "Real Madrid")){
+      this.setState({team1Score: 1, team1Scorers: shotResult[1]}, () => {
+        console.log("Current score: Real Madrid ", this.state.team1Score + " - Barcelona " + this.state.team2Score);
+      });
+    }
+    else if ((shotResult[0] === true) &&(this.state.teamInPossession.name === "Barcelona")){
+      this.setState({team2Score: 1, team2Scorers: shotResult[1]}, () => {
+        console.log("Current score: Real Madrid ", this.state.team1Score + " - Barcelona " + this.state.team2Score);
+      });
+    }
   }
 
   gameStart(){
