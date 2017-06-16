@@ -1,6 +1,7 @@
 import React from 'react';
 import Player from '../components/Player';
 import Pass from '../components/Pass';
+import Shot from '../components/Shot';
 import StartGame from '../components/StartGame.jsx'
 
 class Game extends React.Component {
@@ -112,8 +113,9 @@ class Game extends React.Component {
     thisPlayer.makeMovePhrase("He");
 
     if (probability <= 25){
+      const goalkeeper = this.state.defendingTeam.goalkeeper;
       thisPlayer.attemptShotPhrase(playerInPossession.name);
-      this.takeShot()
+      this.takeShot(playerInPossession, goalkeeper)
     }
     else {
       thisPlayer.attemptPassPhrase(playerInPossession.name, receivingPlayer.name)
@@ -121,8 +123,11 @@ class Game extends React.Component {
     }
   }
 
-  takeShot(){
-    console.log("Goal?");
+  takeShot(playerInPossession, goalkeeper){
+    const thisShot = new Shot();
+    const shotResult = thisShot.shotSuccess(playerInPossession, goalkeeper);
+
+    //next step is to update the score (add it to state first), and add scorer to array of goalscorers
   }
 
   gameStart(){
