@@ -1,7 +1,7 @@
 class Player  {
 
   makeMovePhrase(playerName) {
-    const possessionPhrases = ["turns with the ball", "keeps the ball moving", "gets his head to the ball", "takes the ball forward", "is forced to hold onto the ball", "holds up the play", "looks for the incisive pass", "runs with the ball", "is allowed to continue his run", "advances down the left", "runs with the ball", "turns sharply", "advances with the ball", "takes the ball over the halfway line", "is still going unchallenged",  "comes forward", "delays playing the ball", "spins on the ball expertly", "looks for options from the back", "looks up", "continues unopposed", "now with the ball", "finds himself with space", "keeps going…"];
+    const possessionPhrases = ["turns with the ball", "keeps the ball moving", "takes the ball forward", "is forced to hold onto the ball", "holds up the play", "looks for the incisive pass", "runs with the ball", "is allowed to continue his run", "advances down the left", "runs with the ball", "turns sharply", "advances with the ball", "takes the ball over the halfway line", "is still going unchallenged",  "comes forward", "delays playing the ball", "spins on the ball expertly", "looks for options from the back", "looks up", "continues unopposed", "now with the ball", "finds himself with space", "keeps going…"];
 
     const move = possessionPhrases[Math.floor(Math.random() * possessionPhrases.length)];
     console.log(playerName + " " + move);
@@ -14,6 +14,12 @@ class Player  {
     console.log(player1 + " " + pass + " " + player2);
   }
 
+  attemptShotPhrase(playerName){
+    const shootingPhrases = ["surely!", "goes for glory!", "shoots!", "advances on the keeper", "bears down on goal", "with plenty of time!", "drives it low at goal!", "unmarked!", "takes a shot!", "with the goal at his mercy!"];
+
+    const shoot = shootingPhrases[Math.floor(Math.random() * shootingPhrases.length)];
+    console.log(playerName + " " + shoot);
+  }
 }
 
 export default Player;

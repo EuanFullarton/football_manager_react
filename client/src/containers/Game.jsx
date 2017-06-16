@@ -98,12 +98,31 @@ class Game extends React.Component {
     const passResult = thisPass.passSuccess(passingPlayer, receivingPlayer, defendingPlayer, teamInPossession, defendingTeam);
 
     this.setState({teamInPossession: passResult[0], defendingTeam: passResult[1], playerInPossession:passResult[2]}, () => {
-      this.gameStatus();
+      const newDefendingPlayer = this.state.defendingTeam.players[(Math.floor(Math.random() * 10) + 1)];
+      const newReceivingPlayer = this.state.teamInPossession.players[(Math.floor(Math.random() * 10) + 1)];
+      this.attackingMove(this.state.playerInPossession, newReceivingPlayer, newDefendingPlayer);
     });
   }
 
-  gameStatus(){
-    console.log("STATUS - Now in possession: ", this.state.playerInPossession.name + " for " + this.state.teamInPossession.name);
+  attackingMove(playerInPossession, receivingPlayer, defendingPlayer){
+    const probability = (Math.random() * 100);
+    const thisPlayer = new Player();
+
+    thisPlayer.makeMovePhrase(playerInPossession.name);
+    thisPlayer.makeMovePhrase("He");
+
+    if (probability <= 25){
+      thisPlayer.attemptShotPhrase(playerInPossession.name);
+      this.takeShot()
+    }
+    else {
+      thisPlayer.attemptPassPhrase(playerInPossession.name, receivingPlayer.name)
+      this.makePass(playerInPossession, receivingPlayer, defendingPlayer);
+    }
+  }
+
+  takeShot(){
+    console.log("Goal?");
   }
 
   gameStart(){
@@ -120,7 +139,6 @@ class Game extends React.Component {
       </div>
       )
   }
-
 }
 
 export default Game;
