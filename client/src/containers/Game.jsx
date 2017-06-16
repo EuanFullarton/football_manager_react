@@ -1,5 +1,6 @@
 import React from 'react';
 import Player from '../components/Player';
+import Pass from '../components/Pass';
 import StartGame from '../components/StartGame.jsx'
 
 class Game extends React.Component {
@@ -37,7 +38,7 @@ class Game extends React.Component {
         const team1 = teams[0].teams[0];
         const team2 = teams[0].teams[1];
         this.setState({teams: [team1, team2]});
-        console.log('Teams: ', this.state.teams[0].name, "vs", this.state.teams[1].name)
+        console.log('Match about to begin: ', this.state.teams[0].name, "vs", this.state.teams[1].name)
       }
       else{
         console.log('request.status !== 200')
@@ -58,8 +59,7 @@ class Game extends React.Component {
     }
 
     this.setState({teamInPossession: teamWithPossession, defendingTeam: defendingTeam}, () => { 
-      console.log("Team in possession: ", this.state.teamInPossession), 
-      console.log("Defending team: ", this.state.defendingTeam), 
+      console.log(this.state.teamInPossession.name + " in possession")
       this.setPlayerinPossession() 
     });
   }
@@ -67,70 +67,36 @@ class Game extends React.Component {
   setPlayerinPossession(){
     const players = this.state.teamInPossession.players;
     const defendingPlayers = this.state.defendingTeam.players;
-    let playerWithPossession = players[(Math.floor(Math.random() * 10) + 1)];
-    let defendingPlayer = defendingPlayers[(Math.floor(Math.random() * 10) + 1)];
+    const playerWithPossession = players[(Math.floor(Math.random() * 10) + 1)];
+    const playerWithPossessionName = playerWithPossession.name
+    const defendingPlayer = defendingPlayers[(Math.floor(Math.random() * 10) + 1)];
 
     this.setState({playerInPossession: playerWithPossession}, () => {
-      console.log("Player who has the ball: ", this.state.playerInPossession)
-      let thisPlayer = new Player();
-      let playerToPassTo = players[(Math.floor(Math.random() * 10) + 1)]
+      console.log(playerWithPossessionName + " has the ball")
+      const thisPlayer = new Player();
+      const playerToPassTo = players[(Math.floor(Math.random() * 10) + 1)]
+      const playerToPassToName = playerToPassTo.name
 
-      thisPlayer.makeMove(this.state.playerInPossession.name);
-      thisPlayer.makeMove("He");
-      thisPlayer.attemptPass(this.state.playerInPossession.name, playerToPassTo.name);
-
-      this.passSuccess(playerToPassTo, defendingPlayer);
+      thisPlayer.makeMovePhrase(playerWithPossessionName);
+      thisPlayer.makeMovePhrase("He");
+      thisPlayer.attemptPassPhrase(playerWithPossessionName, playerToPassToName);
+      this.makePass(playerWithPossession, playerToPassTo, defendingPlayer);
     })
   }
 
-  passSuccess(receivingPlayer, defendingPlayer){
-    let playerPassRating = this.state.playerInPossession.attributes[0].Passing;
-    let defenderPositioning = defendingPlayer.attributes[0].Positioning;
-    let defenderTackling = defendingPlayer.attributes[0].Tackling;
-    let defenderPace = defendingPlayer.attributes[0].Pace;
-    let defenderStrength = defendingPlayer.attributes[0].Strength;
-    let receiverDribbling = receivingPlayer.attributes[0].Dribbling;
-    let receiverPace = receivingPlayer.attributes[0].Pace;
-    let receiverStrength = receivingPlayer.attributes[0].Strength;
+  makePass(passingPlayer, receivingPlayer, defendingPlayer){
+    const thisPass = new Pass();
+    const teamInPossession = this.state.teamInPossession;
+    const defendingTeam = this.state.defendingTeam;
+    const passResult = thisPass.passSuccess(passingPlayer, receivingPlayer, defendingPlayer, teamInPossession, defendingTeam);
 
-    // console.log("Player's pass rating: ", playerPassRating);
-    // console.log("Defender's positioning rating: ", defenderPositioning);
-    // console.log("Defender's tackling rating: ", defenderTackling);
-    // console.log("Defender's pace rating: ", defenderPace);
-    // console.log("Defender's strength rating: ", defenderStrength);
-    // console.log("Receiving player's dribbling rating: ", receiverDribbling);
-    // console.log("Receiving player's pace rating: ", receiverPace);
-    // console.log("Receiving player's strength rating: ", receiverStrength);
+    this.setState({teamInPossession: passResult[0], defendingTeam: passResult[1], playerInPossession:[2]}, () => {
+      this.gameStatus();
+    });
+  }
 
-    if (playerPassRating > defenderPositioning){
-      console.log("Pass successful!")
-    }
-    else if (playerPassRating === defenderPositioning){
-      const challenges = [(receiverPace > defenderPace), (receiverStrength > defenderStrength), (receiverDribbling > defenderTackling)];
-      let makeChallenge = challenges[(Math.floor(Math.random() * 3))];
-      console.log("Challenging for ball!: ", makeChallenge);
-
-      if (makeChallenge === true){
-        console.log("Pass successful!")
-      }
-      else {
-        console.log("Pass unsuccessful, ball taken by ", defendingPlayer.name)
-      }
-    }
-    else {
-      console.log("Pass unsuccessful, ball taken by ", defendingPlayer.name)
-    }
-
-
-    //if att pass > def positioning then pass success
-    //if att pass == def positioning then
-      // random between:
-        // receiving strength vs def strength
-        // receiving pace vs def pace
-        // receiving dribbling vs def tackling
-
-    //if pass unsuccessful then change of possession
-
+  gameStatus(){
+    console.log("STATUS - Team now in possession: ", this.state.teamInPossession);
   }
 
   gameStart(){
