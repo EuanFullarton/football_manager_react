@@ -71,10 +71,11 @@ class Game extends React.Component {
 
   setPlayerinPossession(){
     const players = this.state.teamInPossession.players;
-    const playerWithPossession = players[(Math.floor(Math.random() * 10) + 1)];
+    const playerWithPossession = players[(Math.floor(Math.random() * players.length))];
+
     const playerWithPossessionName = playerWithPossession.name
     const defendingPlayers = this.state.defendingTeam.players;
-    const defendingPlayer = defendingPlayers[(Math.floor(Math.random() * 10) + 1)];
+    const defendingPlayer = defendingPlayers[(Math.floor(Math.random() * players.length))];
     
 
     this.setState({playerInPossession: playerWithPossession}, () => {
@@ -84,11 +85,11 @@ class Game extends React.Component {
       //ensuring that player in possession cannot pass to themselves, removing them from the players array
       const indexOfPlayerWithPossession = players.indexOf(playerWithPossession)
       let removedPlayer = players.splice(indexOfPlayerWithPossession, 1);
-      let playerToPassTo = players[(Math.floor(Math.random() * 9) + 1)]
+      let playerToPassTo = players[(Math.floor(Math.random() * players.length))];
 
       //this for when attackingMove() calls the function
       if (playerToPassTo === playerWithPossession){
-        playerToPassTo = players[(Math.floor(Math.random() * 9) + 1)]
+        playerToPassTo = players[(Math.floor(Math.random() * players.length))];
       }
 
       //adding the player back into the array
@@ -110,8 +111,8 @@ class Game extends React.Component {
     const passResult = thisPass.passSuccess(passingPlayer, receivingPlayer, defendingPlayer, teamInPossession, defendingTeam);
 
     this.setState({teamInPossession: passResult[0], defendingTeam: passResult[1], playerInPossession:passResult[2]}, () => {
-      const newDefendingPlayer = this.state.defendingTeam.players[(Math.floor(Math.random() * 10) + 1)];
-      const newReceivingPlayer = this.state.teamInPossession.players[(Math.floor(Math.random() * 10) + 1)];
+      const newDefendingPlayer = this.state.defendingTeam.players[(Math.floor(Math.random() * this.state.defendingTeam.players.length))];
+      const newReceivingPlayer = this.state.teamInPossession.players[(Math.floor(Math.random() * this.state.teamInPossession.players.length))];
       this.attackingMove(this.state.playerInPossession, newReceivingPlayer, newDefendingPlayer);
     });
   }

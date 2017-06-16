@@ -6,31 +6,24 @@ class Shot {
     const goalkeeperHandling = goalkeeper.attributes[0].Handling;
     const goalkeeperPositioning = goalkeeper.attributes[0].Positioning;
 
-    if (playerShootingRating > goalkeeperReflexes){
-      console.log("It's a goal, there was no stopping that!");
+    const goalkeeperAllRatings = [goalkeeperReflexes, goalkeeperHandling, goalkeeperPositioning];
+    const thisGoalkeeperRating = goalkeeperAllRatings[(Math.floor(Math.random() * 3))] 
+
+    if (playerShootingRating > thisGoalkeeperRating){
+      const goals = ["What a goal!", "It's a goal, there was no stopping that!", "Absolute screamer!", "Tucks it away confidently!", "Right in the top corner!", "Sensational! He's chipped the keeper!", "Cool as you like, he's slotted it into the net", "He's made that look easy, brilliant strike"]
+      const thisGoal = goals[(Math.floor(Math.random() * goals.length))];
+
+      console.log("*****GOAALLLLL*****");
+      console.log(thisGoal);
       console.log(playerInPossession.name + " is the scorer");
       return [true, playerInPossession];
     }
-    else if (playerShootingRating === goalkeeperReflexes){
-      const scoringScenarios = [(playerShootingRating > goalkeeperPositioning), (playerShootingRating > goalkeeperHandling)]
-      const shotResult = scoringScenarios[(Math.floor(Math.random() * 2))];
-      console.log("Can the keeper save it...?");
-
-      if(shotResult === scoringScenarios[0] && (shotResult === true)){
-        console.log(playerInPossession.name + " scores! The keeper's positioning was all wrong!");
-        return [true, playerInPossession];
-      }
-      else if (shotResult === scoringScenarios[1] && (shotResult === true)){
-        console.log(playerInPossession.name + " scores! The keeper fumbled it and has paid dearly!")
-        return [true, playerInPossession];
-      }
-      else {
-        console.log("The keeper has made a wonderful save!");
-        return [false];
-      }
-    }
     else {
-      console.log("Incredible reflex save by the keeper!");
+      const saves = ["Incredible reflex save by the keeper!", "What a save!", "Keeper guesses right, well held", "Comfortable save in the end", "Parried away by the goalkeeper", "Straight into the keeper's hands", "The keeper didn't look troubled by that", "The keeper makes a wonderful save!"]
+      const thisSave = saves[(Math.floor(Math.random() * saves.length))];
+
+      console.log(thisSave);
+
       return [false];
     }
 

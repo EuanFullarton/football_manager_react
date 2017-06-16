@@ -21,7 +21,6 @@ class Pass {
     else if (playerPassRating === defenderPositioning){
       const challenges = [(receiverPace > defenderPace), (receiverStrength > defenderStrength), (receiverDribbling > defenderTackling)];
       const makeChallenge = challenges[(Math.floor(Math.random() * 3))];
-      console.log("It's not the best ball...");
 
       if (makeChallenge === challenges[0] && (makeChallenge === true)){
         console.log(receivingPlayer.name + " sprints ahead of the defender to get to the ball");
