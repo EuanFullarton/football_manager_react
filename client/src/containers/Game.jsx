@@ -138,12 +138,12 @@ class Game extends React.Component {
     const thisShot = new Shot();
     const shotResult = thisShot.shotSuccess(playerInPossession, goalkeeper);
     if ((shotResult[0] === true) &&(this.state.teamInPossession.name === "Real Madrid")){
-      this.setState({team1Score: 1, team1Scorers: shotResult[1]}, () => {
+      this.setState({team1Score: (this.state.team1Score + 1), team1Scorers: shotResult[1]}, () => {
         console.log("Current score: Real Madrid ", this.state.team1Score + " - Barcelona " + this.state.team2Score);
       });
     }
     else if ((shotResult[0] === true) &&(this.state.teamInPossession.name === "Barcelona")){
-      this.setState({team2Score: 1, team2Scorers: shotResult[1]}, () => {
+      this.setState({team2Score: (this.state.team2Score + 1), team2Scorers: shotResult[1]}, () => {
         console.log("Current score: Real Madrid ", this.state.team1Score + " - Barcelona " + this.state.team2Score);
       });
     }
