@@ -15,7 +15,8 @@ class Game extends React.Component {
       team2Scorers: [],
       teamInPossession: "",
       defendingTeam: "",
-      playerInPossession: ""
+      playerInPossession: "",
+      gameTime: 0
     }
     this.sendHTTPRequest = this.sendHTTPRequest.bind(this);
     this.sendHTTPRequest('/game');
@@ -30,7 +31,8 @@ class Game extends React.Component {
       team2Scorers: [],
       teamInPossession: "",
       defendingTeam: "",
-      playerInPossession: ""
+      playerInPossession: "",
+      gameTime: 0
     }
   }
 
@@ -118,13 +120,13 @@ class Game extends React.Component {
   }
 
   attackingMove(playerInPossession, receivingPlayer, defendingPlayer){
-    const probability = (Math.random() * 100);
+    const shotProbability = (Math.random() * 100);
     const thisPlayer = new Player();
 
     thisPlayer.makeMovePhrase(playerInPossession.name);
     thisPlayer.makeMovePhrase("He");
 
-    if (probability <= 25){
+    if (shotProbability <= 25){
       const goalkeeper = this.state.defendingTeam.goalkeeper;
       thisPlayer.attemptShotPhrase(playerInPossession.name);
       this.takeShot(playerInPossession, goalkeeper)
@@ -133,6 +135,7 @@ class Game extends React.Component {
       thisPlayer.attemptPassPhrase(playerInPossession.name, receivingPlayer.name)
       this.makePass(playerInPossession, receivingPlayer, defendingPlayer);
     }
+    this.timeElapse();
   }
 
   takeShot(playerInPossession, goalkeeper){
@@ -152,6 +155,25 @@ class Game extends React.Component {
 
   gameStart(){
     this.setTeamInPossession();
+  }
+
+  timeElapse(){
+    this.setState({gameTime: this.state.gameTime + 5});
+    console.log("Game time: ", this.state.gameTime);
+
+    if(this.state.gameTime >= 90){
+      this.gameEnd();
+      return;
+    }
+    else {
+      this.setPlayerinPossession();
+    }
+  }
+
+  gameEnd(){
+    console.log("*****There's the final whistle, the game has ended: Real Madrid ", this.state.team1Score + " - Barcelona " + this.state.team2Score + "*****");
+    throw new Error("Game ended!");
+    return;
   }
 
   render(){
