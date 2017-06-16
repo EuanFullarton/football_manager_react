@@ -15,7 +15,6 @@ class Pass {
 
 
     if (playerPassRating > defenderPositioning){
-      console.log("Pass successful!")
       console.log(receivingPlayer.name + " now with the ball");
       return [changePossessor, changeDefender, receivingPlayer];
     }

@@ -35,8 +35,8 @@ class Game extends React.Component {
     request.onload = () => {
       if(request.status === 200){
         const teams = JSON.parse(request.responseText);
-        const team1 = teams[0].teams[0];
-        const team2 = teams[0].teams[1];
+        const team1 = teams[0];
+        const team2 = teams[1];
         this.setState({teams: [team1, team2]});
         console.log('Match about to begin: ', this.state.teams[0].name, "vs", this.state.teams[1].name)
       }
@@ -66,15 +66,22 @@ class Game extends React.Component {
 
   setPlayerinPossession(){
     const players = this.state.teamInPossession.players;
-    const defendingPlayers = this.state.defendingTeam.players;
     const playerWithPossession = players[(Math.floor(Math.random() * 10) + 1)];
     const playerWithPossessionName = playerWithPossession.name
+    const defendingPlayers = this.state.defendingTeam.players;
     const defendingPlayer = defendingPlayers[(Math.floor(Math.random() * 10) + 1)];
+    
 
     this.setState({playerInPossession: playerWithPossession}, () => {
       console.log(playerWithPossessionName + " has the ball")
       const thisPlayer = new Player();
-      const playerToPassTo = players[(Math.floor(Math.random() * 10) + 1)]
+      //ensuring that player in possession cannot pass to themselves, removing them from the players array
+      const indexOfPlayerWithPossession = players.indexOf(playerWithPossession)
+      let removedPlayer = players.splice(indexOfPlayerWithPossession, 1);
+      let playerToPassTo = players[(Math.floor(Math.random() * 10) + 1)]
+      //adding the player back into the array
+      players.push(removedPlayer[0])
+
       const playerToPassToName = playerToPassTo.name
 
       thisPlayer.makeMovePhrase(playerWithPossessionName);
@@ -90,13 +97,13 @@ class Game extends React.Component {
     const defendingTeam = this.state.defendingTeam;
     const passResult = thisPass.passSuccess(passingPlayer, receivingPlayer, defendingPlayer, teamInPossession, defendingTeam);
 
-    this.setState({teamInPossession: passResult[0], defendingTeam: passResult[1], playerInPossession:[2]}, () => {
+    this.setState({teamInPossession: passResult[0], defendingTeam: passResult[1], playerInPossession:passResult[2]}, () => {
       this.gameStatus();
     });
   }
 
   gameStatus(){
-    console.log("STATUS - Team now in possession: ", this.state.teamInPossession);
+    console.log("STATUS - Now in possession: ", this.state.playerInPossession.name + " for " + this.state.teamInPossession.name);
   }
 
   gameStart(){
