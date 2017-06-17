@@ -16,7 +16,8 @@ class Game extends React.Component {
       teamInPossession: "",
       defendingTeam: "",
       playerInPossession: "",
-      gameTime: 0
+      gameTime: 0,
+      commentary: "Commentary"
     }
     this.sendHTTPRequest = this.sendHTTPRequest.bind(this);
     this.sendHTTPRequest('/game');
@@ -32,7 +33,8 @@ class Game extends React.Component {
       teamInPossession: "",
       defendingTeam: "",
       playerInPossession: "",
-      gameTime: 0
+      gameTime: 0,
+      commentary: "Commentary"
     }
   }
 
@@ -45,6 +47,7 @@ class Game extends React.Component {
         const team1 = teams[0];
         const team2 = teams[1];
         this.setState({teams: [team1, team2]});
+        this.setState({commentary: ('Match about to begin: ' + this.state.teams[0].name + " vs " + this.state.teams[1].name)});
         console.log('Match about to begin: ', this.state.teams[0].name, "vs", this.state.teams[1].name)
       }
       else{
@@ -212,7 +215,8 @@ class Game extends React.Component {
     return(
       <div>
       <h1>Footsoccerpassball</h1>
-      <p>Go to /game to view the data!</p>
+      <p>Go to /gameData to view the data!</p>
+      <p id="commentary">{this.state.commentary}</p>
       <StartGame 
       startGame={this.gameStart.bind(this)}/>
       </div>
