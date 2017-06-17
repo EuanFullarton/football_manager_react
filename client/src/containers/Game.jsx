@@ -161,9 +161,9 @@ class Game extends React.Component {
       });
     }
     else {
-        console.log(shotResult[1]);
-        this.timeElapse();  
-        this.goalKick();
+      console.log(shotResult[1]);
+      this.timeElapse();  
+      this.goalKick();
     }
   }
 
@@ -174,7 +174,6 @@ class Game extends React.Component {
   timeElapse(){
     this.setState({gameTime: this.state.gameTime + 5}, () => {
       console.log("Game time: ", this.state.gameTime);
-
       if (this.state.gameTime === 45){
         this.halfTime();
         return;
@@ -182,6 +181,9 @@ class Game extends React.Component {
       else if(this.state.gameTime >= 90){
         this.gameEnd();
         return;
+      }
+      else {
+        this.gameStart();
       }
     });
   }
@@ -198,6 +200,7 @@ class Game extends React.Component {
 
   halfTime(){
     console.log("*****Half time!*****");
+    return;
   }
 
   gameEnd(){
