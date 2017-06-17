@@ -68,7 +68,7 @@ class Game extends React.Component {
       defendingTeam = teams[0];
     }
 
-    this.setState({teamInPossession: teamWithPossession, defendingTeam: defendingTeam}, () => { 
+    this.setState({teamInPossession: teamWithPossession, defendingTeam: defendingTeam}, () => {
       console.log(this.state.teamInPossession.name + " in possession")
       this.setPlayerinPossession()
     });
@@ -216,6 +216,7 @@ class Game extends React.Component {
       <div>
       <h1>Footsoccerpassball</h1>
       <p id="commentary">{this.state.commentary}</p>
+      <p id="scores">{this.state.team1Score + " - " + this.state.team2Score}</p>
       <StartGame 
       startGame={this.gameStart.bind(this)}/>
       </div>

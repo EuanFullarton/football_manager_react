@@ -12,7 +12,7 @@ class StartGame extends React.Component{
 
   render() {
     return (
-      <div>
+      <div style={{"textAlign": "center"}}>
       <button className="startGameBtn" onClick={this.handleButtonClick.bind(this)}>Kick off</button> 
       </div>
       )

@@ -24,9 +24,13 @@ h1{
   color:black;
 }
 
+#scores{
+  text-align: center;
+  font-size:3em;
+}
+
 button{
-  margin-left:45%;
-  margin-top:10%;
+  margin-top:5%;
   background-color: red;
   color:white;
   font-size:2em;
