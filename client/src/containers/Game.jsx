@@ -215,7 +215,6 @@ class Game extends React.Component {
     return(
       <div>
       <h1>Footsoccerpassball</h1>
-      <p>Go to /gameData to view the data!</p>
       <p id="commentary">{this.state.commentary}</p>
       <StartGame 
       startGame={this.gameStart.bind(this)}/>
