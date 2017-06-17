@@ -1,6 +1,8 @@
 [ 
   {
     "name": "Real Madrid",
+    "badge": "'images/madrid.png'",
+    "color": "white",
     "goalkeeper": {
       "name": "Keylor Navas",
       "attributes":[{
@@ -164,6 +166,8 @@
   },
   {
     "name": "Barcelona",
+    "badge": "images/barcelona.png",
+    "color": "red",
     "goalkeeper": {
       "name": "Marc-Andre ter Stegen",
       "attributes":[{

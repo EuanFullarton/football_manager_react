@@ -9,6 +9,7 @@ class Game extends React.Component {
     super(props);
     this.state ={
       teams: [],
+      teamBadges: [],
       team1Score: 0,
       team2Score: 0,
       team1Scorers: [],
@@ -17,25 +18,10 @@ class Game extends React.Component {
       defendingTeam: "",
       playerInPossession: "",
       gameTime: 0,
-      commentary: "Commentary"
+      commentary: ""
     }
     this.sendHTTPRequest = this.sendHTTPRequest.bind(this);
     this.sendHTTPRequest('/game');
-  }
-
-  reset(){
-    this.setState ={
-      teams:[],
-      team1Score: 0,
-      team2Score: 0,
-      team1Scorers: [],
-      team2Scorers: [],
-      teamInPossession: "",
-      defendingTeam: "",
-      playerInPossession: "",
-      gameTime: 0,
-      commentary: "Commentary"
-    }
   }
 
   sendHTTPRequest(url) {
@@ -46,7 +32,7 @@ class Game extends React.Component {
         const teams = JSON.parse(request.responseText);
         const team1 = teams[0];
         const team2 = teams[1];
-        this.setState({teams: [team1, team2]});
+        this.setState({teams: [team1, team2], teamBadge: [team1.badge, team2.badge]});
         this.setState({commentary: ('Match about to begin: ' + this.state.teams[0].name + " vs " + this.state.teams[1].name)});
         console.log('Match about to begin: ', this.state.teams[0].name, "vs", this.state.teams[1].name)
       }
@@ -144,7 +130,7 @@ class Game extends React.Component {
     const thisShot = new Shot();
     const shotResult = thisShot.shotSuccess(playerInPossession, goalkeeper);
     if ((shotResult[0] === true) &&(this.state.teamInPossession.name === "Real Madrid")){
-      this.setState({team1Score: (this.state.team1Score + 1), team1Scorers: shotResult[2]}, () => {
+      this.setState({team1Score: (this.state.team1Score + 1), team1Scorers: this.state.team1Scorers + " " + shotResult[2] + ", " + this.state.gameTime}, () => {
         console.log("*****GOAALLLLL*****");
         console.log(shotResult[1]);
         console.log(shotResult[2] + " is the scorer");
@@ -154,7 +140,7 @@ class Game extends React.Component {
       });
     }
     else if ((shotResult[0] === true) &&(this.state.teamInPossession.name === "Barcelona")){
-      this.setState({team2Score: (this.state.team2Score + 1), team2Scorers: shotResult[2]}, () => {
+      this.setState({team2Score: (this.state.team2Score + 1), team2Scorers: this.state.team2Scorers + " " + shotResult[2] + ", " + this.state.gameTime}, () => {
         console.log("*****GOAALLLLL*****");
         console.log(shotResult[1]);
         console.log(shotResult[2] + " is the scorer");
@@ -202,11 +188,13 @@ class Game extends React.Component {
   }
 
   halfTime(){
+    this.setState({commentary: "Half time"})
     console.log("*****Half time!*****");
     return;
   }
 
   gameEnd(){
+    this.setState({commentary: "Final whistle"})
     console.log("*****There's the final whistle, the game has ended: Real Madrid ", this.state.team1Score + " - Barcelona " + this.state.team2Score + "*****");
     return;
   }
@@ -217,8 +205,11 @@ class Game extends React.Component {
       <h1>Footsoccerpassball</h1>
       <p id="commentary">{this.state.commentary}</p>
       <p id="scores">{this.state.team1Score + " - " + this.state.team2Score}</p>
+      <p id="team1Scoresheet">{this.state.team1Scorers}</p>
+      <p id="team2Scoresheet">{this.state.team2Scorers}</p>
       <StartGame 
-      startGame={this.gameStart.bind(this)}/>
+      startGame={this.gameStart.bind(this)}
+      />
       </div>
       )
   }

@@ -36,3 +36,19 @@ button{
   font-size:2em;
   border-radius: 10%;
 }
+
+#team1Scoresheet{
+  float:left;
+  margin-top:3%;
+  margin-left:10%;
+  width:13%;
+  height:30%;
+}
+
+#team2Scoresheet{
+  float:right;
+  margin-top:3%;
+  margin-right: 10%;
+  width:13%;
+  height:30%;
+}
