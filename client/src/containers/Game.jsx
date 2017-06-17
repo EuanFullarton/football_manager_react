@@ -67,7 +67,7 @@ class Game extends React.Component {
 
     this.setState({teamInPossession: teamWithPossession, defendingTeam: defendingTeam}, () => { 
       console.log(this.state.teamInPossession.name + " in possession")
-      this.setPlayerinPossession() 
+      this.setPlayerinPossession()
     });
   }
 
@@ -135,21 +135,35 @@ class Game extends React.Component {
       thisPlayer.attemptPassPhrase(playerInPossession.name, receivingPlayer.name)
       this.makePass(playerInPossession, receivingPlayer, defendingPlayer);
     }
-    this.timeElapse();
   }
 
   takeShot(playerInPossession, goalkeeper){
     const thisShot = new Shot();
     const shotResult = thisShot.shotSuccess(playerInPossession, goalkeeper);
     if ((shotResult[0] === true) &&(this.state.teamInPossession.name === "Real Madrid")){
-      this.setState({team1Score: (this.state.team1Score + 1), team1Scorers: shotResult[1]}, () => {
+      this.setState({team1Score: (this.state.team1Score + 1), team1Scorers: shotResult[2]}, () => {
+        console.log("*****GOAALLLLL*****");
+        console.log(shotResult[1]);
+        console.log(shotResult[2] + " is the scorer");
         console.log("Current score: Real Madrid ", this.state.team1Score + " - Barcelona " + this.state.team2Score);
+        this.timeElapse();
+        this.backToCentre();
       });
     }
     else if ((shotResult[0] === true) &&(this.state.teamInPossession.name === "Barcelona")){
-      this.setState({team2Score: (this.state.team2Score + 1), team2Scorers: shotResult[1]}, () => {
+      this.setState({team2Score: (this.state.team2Score + 1), team2Scorers: shotResult[2]}, () => {
+        console.log("*****GOAALLLLL*****");
+        console.log(shotResult[1]);
+        console.log(shotResult[2] + " is the scorer");
         console.log("Current score: Real Madrid ", this.state.team1Score + " - Barcelona " + this.state.team2Score);
+        this.timeElapse();
+        this.backToCentre();
       });
+    }
+    else {
+        console.log(shotResult[1]);
+        this.timeElapse();  
+        this.goalKick();
     }
   }
 
@@ -158,21 +172,36 @@ class Game extends React.Component {
   }
 
   timeElapse(){
-    this.setState({gameTime: this.state.gameTime + 5});
-    console.log("Game time: ", this.state.gameTime);
+    this.setState({gameTime: this.state.gameTime + 5}, () => {
+      console.log("Game time: ", this.state.gameTime);
 
-    if(this.state.gameTime >= 90){
-      this.gameEnd();
-      return;
-    }
-    else {
-      this.setPlayerinPossession();
-    }
+      if (this.state.gameTime === 45){
+        this.halfTime();
+        return;
+      }
+      else if(this.state.gameTime >= 90){
+        this.gameEnd();
+        return;
+      }
+    });
+  }
+
+  backToCentre(){
+    console.log("Back to centre");
+    return;
+  }
+
+  goalKick(){
+    console.log("Out for a goal kick");
+    return;
+  }
+
+  halfTime(){
+    console.log("*****Half time!*****");
   }
 
   gameEnd(){
     console.log("*****There's the final whistle, the game has ended: Real Madrid ", this.state.team1Score + " - Barcelona " + this.state.team2Score + "*****");
-    throw new Error("Game ended!");
     return;
   }
 
