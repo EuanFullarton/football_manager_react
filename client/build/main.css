@@ -1,7 +1,18 @@
+body{
+  background-image: url(./images/football_background.jpg);
+  height:100%;
+  width:100%;
+  color:white;
+}
+
 #commentary{
   height:20%;
   width:80%;
   margin:auto;
   text-align: center;
+  font-size: 2em;
+  padding:5%;
   border: 2px solid black;
+  background-color: white;
+  color:black;
 }
