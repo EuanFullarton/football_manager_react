@@ -300,10 +300,12 @@ class Game extends React.Component {
   }
 
   goalKick(){
+    const thisPass = new Pass();
+
     setTimeout(function(){
-      let thisCommentary = ("The keeper boots the ball back into play");
-      console.log("Keeper has the ball");
-      this.setState({commentary: thisCommentary});
+      let thisGKPass = thisPass.goalKeeperPassPhrase(); 
+      console.log("thisGKPass");
+      this.setState({commentary: thisGKPass});
     }.bind(this), 1000);
     return;
   }

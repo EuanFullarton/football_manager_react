@@ -23,6 +23,7 @@ class Player  {
     console.log(playerName + " " + shoot);
     return (playerName + " " + shoot);
   }
+
 }
 
 export default Player;

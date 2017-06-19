@@ -52,6 +52,15 @@ class Pass {
     }
   }
 
+  goalKeeperPassPhrase(){
+    const keeperPhrases = ["The keeper boots the ball back into play", "The keeper plays it short to a nearby defender", "The goalkeeper holds onto the ball and looks for a teammate in space", "The keeper restarts the game with a long kick"];
+
+    const thisKeeperPhrase = keeperPhrases[Math.floor(Math.random () * keeperPhrases.length)];
+    return thisKeeperPhrase;
+
+  }
+
+
 }
 
 export default Pass;
