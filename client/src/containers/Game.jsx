@@ -20,6 +20,7 @@ class Game extends React.Component {
       defendingTeam: "",
       playerInPossession: "",
       gameTime: 0,
+      half: "first",
       commentary: ""
     }
     this.sendHTTPRequest = this.sendHTTPRequest.bind(this);
@@ -130,6 +131,10 @@ class Game extends React.Component {
 
     this.setState({teamInPossession: passResult[0], defendingTeam: passResult[1], playerInPossession:passResult[2]}, () => {
 
+      if (((this.state.gameTime < 45) && (this.state.half === "first")) || (this.state.gameTime < 90) && (this.state.half === "second")){
+        this.setState({gameTime: (this.state.gameTime += 1)});
+      }
+
       let thisCommentary = passResult[3];
       const possessionFontColor = this.state.teamInPossession.fontColor;
       const possessionBackgroundColor = this.state.teamInPossession.backgroundColor;
@@ -206,6 +211,26 @@ class Game extends React.Component {
           let thisCommentary = "*****GOAALLLLL*****";
           console.log("*****GOAALLLLL*****");
           this.setState({commentary: thisCommentary}, () => {
+
+
+            const possessionFontColor = this.state.teamInPossession.fontColor;
+            const possessionBackgroundColor = this.state.teamInPossession.backgroundColor;
+
+            //trying to make goals flash
+            setTimeout(function(){
+              this.setState({possessionFontColor: possessionBackgroundColor, possessionBackgroundColor: possessionFontColor})
+            }.bind(this), 200);
+            setTimeout(function(){
+              this.setState({possessionFontColor: possessionFontColor, possessionBackgroundColor: possessionBackgroundColor})
+            }.bind(this), 200);
+            setTimeout(function(){
+              this.setState({possessionFontColor: possessionBackgroundColor, possessionBackgroundColor: possessionFontColor})
+            }.bind(this), 200);
+            setTimeout(function(){
+              this.setState({possessionFontColor: possessionFontColor, possessionBackgroundColor: possessionBackgroundColor})
+            }.bind(this), 200);
+
+
             setTimeout(function(){
               let thisCommentary = (shotResult[1]);
               console.log(shotResult[1]);
@@ -247,6 +272,25 @@ class Game extends React.Component {
           let thisCommentary = "*****GOAALLLLL*****";
           console.log("*****GOAALLLLL*****");
           this.setState({commentary: thisCommentary}, () => {
+
+            const possessionFontColor = this.state.teamInPossession.fontColor;
+            const possessionBackgroundColor = this.state.teamInPossession.backgroundColor;
+
+            //trying to make goals flash
+            setTimeout(function(){
+              this.setState({possessionFontColor: possessionBackgroundColor, possessionBackgroundColor: possessionFontColor})
+            }.bind(this), 200);
+            setTimeout(function(){
+              this.setState({possessionFontColor: possessionFontColor, possessionBackgroundColor: possessionBackgroundColor})
+            }.bind(this), 200);
+            setTimeout(function(){
+              this.setState({possessionFontColor: possessionBackgroundColor, possessionBackgroundColor: possessionFontColor})
+            }.bind(this), 200);
+            setTimeout(function(){
+              this.setState({possessionFontColor: possessionFontColor, possessionBackgroundColor: possessionBackgroundColor})
+            }.bind(this), 200);
+
+
             setTimeout(function(){
               let thisCommentary = (shotResult[1]);
               console.log(shotResult[1]);
@@ -307,23 +351,52 @@ class Game extends React.Component {
   }
 
   timeElapse(){
-    this.setState({gameTime: this.state.gameTime + 15}, () => {
-      console.log("Game time: ", this.state.gameTime);
-      if (this.state.gameTime === 45){
+    if ((this.state.gameTime >= 45) && (this.state.gameTime <= 50) && (this.state.half === "first")){
+      this.halfTime();
+      return;
+    }
+    else if ((this.state.gameTime >= 90) && (this.state.gameTime <= 95)){
+      this.gameEnd();
+      return;
+    }
+    else if (((this.state.gameTime >= 30) && (this.state.gameTime < 45)) || ((this.state.gameTime >= 75) && (this.state.gameTime < 90))){
+      this.setState({gameTime: this.state.gameTime + 5}, () => {
+        console.log("Game time: ", this.state.gameTime);
+        if ((this.state.gameTime >= 45) && (this.state.gameTime <= 50)){
+          this.halfTime();
+          return;
+        }
+        else if ((this.state.gameTime >= 90) && (this.state.gameTime <= 95)){
+          this.endGame();
+          return;
+        }
+        else {
+          setTimeout(function(){ 
+            this.gameStart();
+          }.bind(this), 3000);
+
+        }
+      });
+    }
+    else{
+      this.setState({gameTime: this.state.gameTime + 15}, () => {
+        console.log("Game time: ", this.state.gameTime);
+        if(this.state.gameTime >= 90){
+         this.gameEnd();
+         return; 
+       }
+       else if ((this.state.gameTime >= 45) && (this.state.gameTime <= 50) && (this.state.half === "first")){
         this.halfTime();
-        return;
-      }
-      else if(this.state.gameTime >= 90){
-        this.gameEnd();
         return;
       }
       else {
         setTimeout(function(){ 
           this.gameStart();
         }.bind(this), 3000);
-
       }
     });
+
+    }
   }
 
   backToCentre(){
@@ -334,7 +407,7 @@ class Game extends React.Component {
       let thisCommentary = ("Back to centre");
       console.log("Back to centre");
       this.setState({commentary: thisCommentary, possessionFontColor: possessionFontColor , possessionBackgroundColor: possessionBackgroundColor});
-    }.bind(this), 1000);
+    }.bind(this), 3000);
     return;
   }
 
@@ -351,9 +424,9 @@ class Game extends React.Component {
 
   halfTime(){
     setTimeout(function(){
-      this.setState({commentary: "Half time", possessionFontColor: 'white' , possessionBackgroundColor: 'black'})
+      this.setState({gameTime: 45, commentary: "Half time", possessionFontColor: 'white' , possessionBackgroundColor: 'black', half: "second"})
       console.log("*****Half time!*****");
-    }.bind(this), 3000);
+    }.bind(this), 4000);
     return;
   }
 
