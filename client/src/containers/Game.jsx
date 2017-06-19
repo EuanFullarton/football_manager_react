@@ -110,7 +110,6 @@ class Game extends React.Component {
 
       setTimeout(function(){ 
         let thisCommentary = this.makePass(playerWithPossession, playerToPassTo, defendingPlayer);
-       // this.setState({commentary: thisCommentary});
       }.bind(this), 4000);
 
     })
@@ -127,11 +126,8 @@ class Game extends React.Component {
     this.setState({teamInPossession: passResult[0], defendingTeam: passResult[1], playerInPossession:passResult[2]}, () => {
 
       let thisCommentary = passResult[3];
-      console.log("THIS PASS RESULT:", thisCommentary)
 
       this.setState({commentary: thisCommentary}, () => {
-
-        console.log(this.state);
 
         const players = this.state.teamInPossession.players;
         const indexOfPlayerWithPossession = players.indexOf(this.state.playerInPossession)
@@ -177,7 +173,6 @@ class Game extends React.Component {
 
       setTimeout(function(){ 
         let thisCommentary = this.takeShot(playerInPossession, goalkeeper);
-        this.setState({commentary: thisCommentary});
       }.bind(this), 4000);
 
     }
@@ -197,76 +192,72 @@ class Game extends React.Component {
   takeShot(playerInPossession, goalkeeper){
     const thisShot = new Shot();
     const shotResult = thisShot.shotSuccess(playerInPossession, goalkeeper);
-    if ((shotResult[0] === true) &&(this.state.teamInPossession.name === "Real Madrid")){
+    if ((shotResult[0] === true) &&(this.state.teamInPossession === this.state.teams[0])){
       this.setState({team1Score: (this.state.team1Score + 1), team1Scorers: this.state.team1Scorers + " " + shotResult[2] + ", " + this.state.gameTime}, () => {
 
         setTimeout(function(){
           let thisCommentary = "*****GOAALLLLL*****";
           console.log("*****GOAALLLLL*****");
-          this.setState({commentary: thisCommentary});
+          this.setState({commentary: thisCommentary}, () => {
+            setTimeout(function(){
+              let thisCommentary = (shotResult[1]);
+              console.log(shotResult[1]);
+              this.setState({commentary: thisCommentary}, () => {
+                setTimeout(function(){
+                  let thisCommentary = (shotResult[2] + " is the scorer");
+                  console.log(shotResult[2] + " is the scorer");
+                  this.setState({commentary: thisCommentary}, () => {
+                    setTimeout(function(){
+                      this.timeElapse();
+                      this.backToCentre();
+                    }.bind(this), 4000);
+                  });
+                }.bind(this), 3000);
+              });
+            }.bind(this), 2000);
+          });
         }.bind(this), 1000);
 
         setTimeout(function(){
-          let thisCommentary = (shotResult[1]);
-          console.log(shotResult[1]);
-          this.setState({commentary: thisCommentary});
-        }.bind(this), 2000);
-
-        setTimeout(function(){
-          let thisCommentary = (shotResult[2] + " is the scorer");
-          console.log(shotResult[2] + " is the scorer");
-          this.setState({commentary: thisCommentary});
-        }.bind(this), 3000);
-
-        setTimeout(function(){
-          let thisCommentary = ("Current score: Real Madrid ", this.state.team1Score + " - Barcelona " + this.state.team2Score);
-          console.log("Current score: Real Madrid ", this.state.team1Score + " - Barcelona " + this.state.team2Score);
-          this.setState({commentary: thisCommentary});
+          this.timeElapse();
+          this.backToCentre();
         }.bind(this), 4000);
 
-        this.timeElapse();
-        this.backToCentre();
       });
     }
-    else if ((shotResult[0] === true) &&(this.state.teamInPossession.name === "Barcelona")){
+    else if ((shotResult[0] === true) &&(this.state.teamInPossession === this.state.teams[1])){
       this.setState({team2Score: (this.state.team2Score + 1), team2Scorers: this.state.team2Scorers + " " + shotResult[2] + ", " + this.state.gameTime}, () => {
 
         setTimeout(function(){
           let thisCommentary = "*****GOAALLLLL*****";
           console.log("*****GOAALLLLL*****");
-          this.setState({commentary: thisCommentary});
-        }.bind(this), 1000);
+          this.setState({commentary: thisCommentary}, () => {
+            setTimeout(function(){
+              let thisCommentary = (shotResult[1]);
+              console.log(shotResult[1]);
+              this.setState({commentary: thisCommentary}, () => {
+                setTimeout(function(){
+                  let thisCommentary = (shotResult[2] + " is the scorer");
+                  console.log(shotResult[2] + " is the scorer");
+                  this.setState({commentary: thisCommentary}, () => {
+                    setTimeout(function(){
+                      this.timeElapse();
+                      this.backToCentre();
+                    }.bind(this), 3500);
+                  });
+                }.bind(this), 2500);
+              });
+            }.bind(this), 1500);
+          });
+        }.bind(this), 500);
 
-        setTimeout(function(){
-          let thisCommentary = (shotResult[1]);
-          console.log(shotResult[1]);
-          this.setState({commentary: thisCommentary});
-        }.bind(this), 2000);
-
-        setTimeout(function(){
-          let thisCommentary = (shotResult[2] + " is the scorer");
-          console.log(shotResult[2] + " is the scorer");
-          this.setState({commentary: thisCommentary});
-        }.bind(this), 3000);
-
-        setTimeout(function(){
-          let thisCommentary = ("Current score: Real Madrid ", this.state.team1Score + " - Barcelona " + this.state.team2Score);
-          console.log("Current score: Real Madrid ", this.state.team1Score + " - Barcelona " + this.state.team2Score);
-          this.setState({commentary: thisCommentary});
-        }.bind(this), 4000);
-
-        this.timeElapse();
-        this.backToCentre();
       });
     }
     else {
 
-      // setTimeout(function(){
-        let thisCommentary = (shotResult[1]);
-        console.log(shotResult[1]);
-        this.setState({commentary: thisCommentary});
-      // }.bind(this), 1000);
-
+      let thisCommentary = (shotResult[1]);
+      console.log(shotResult[1]);
+      this.setState({commentary: thisCommentary});
 
       this.timeElapse();  
       this.goalKick();
@@ -280,7 +271,7 @@ class Game extends React.Component {
   }
 
   timeElapse(){
-    this.setState({gameTime: this.state.gameTime + 5}, () => {
+    this.setState({gameTime: this.state.gameTime + 15}, () => {
       console.log("Game time: ", this.state.gameTime);
       if (this.state.gameTime === 45){
         this.halfTime();
@@ -291,7 +282,10 @@ class Game extends React.Component {
         return;
       }
       else {
-        this.gameStart();
+        setTimeout(function(){ 
+          this.gameStart();
+        }.bind(this), 3000);
+
       }
     });
   }
@@ -307,22 +301,26 @@ class Game extends React.Component {
 
   goalKick(){
     setTimeout(function(){
-      let thisCommentary = ("Out for a goal kick");
-      console.log("Out for a goal kick");
+      let thisCommentary = ("The keeper boots the ball back into play");
+      console.log("Keeper has the ball");
       this.setState({commentary: thisCommentary});
     }.bind(this), 1000);
     return;
   }
 
   halfTime(){
-    this.setState({commentary: "Half time"})
-    console.log("*****Half time!*****");
+    setTimeout(function(){
+      this.setState({commentary: "Half time"})
+      console.log("*****Half time!*****");
+    }.bind(this), 3000);
     return;
   }
 
   gameEnd(){
-    this.setState({commentary: "Final whistle"})
-    console.log("*****There's the final whistle, the game has ended: Real Madrid ", this.state.team1Score + " - Barcelona " + this.state.team2Score + "*****");
+    setTimeout(function(){
+      this.setState({commentary: "Final whistle"})
+      console.log("*****There's the final whistle, the game has ended: Real Madrid ", this.state.team1Score + " - Barcelona " + this.state.team2Score + "*****");
+    }.bind(this), 3000);
     return;
   }
 
