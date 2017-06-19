@@ -55,6 +55,7 @@ class Game extends React.Component {
     }
 
     this.setState({teamInPossession: teamWithPossession, defendingTeam: defendingTeam}, () => {
+      this.setState({commentary: this.state.teamInPossession.name + " in possession"});
       console.log(this.state.teamInPossession.name + " in possession")
       this.setPlayerinPossession()
     });
@@ -69,10 +70,14 @@ class Game extends React.Component {
     const defendingPlayer = defendingPlayers[(Math.floor(Math.random() * players.length))];
     
 
-    this.setState({playerInPossession: playerWithPossession}, () => {
-      console.log(playerWithPossessionName + " has the ball")
-      const thisPlayer = new Player();
-      
+    setTimeout(function(){ 
+
+      this.setState({playerInPossession: playerWithPossession}, () => {
+        this.setState({commentary: this.state.playerInPossession.name + " has the ball"});
+
+        console.log(playerWithPossessionName + " has the ball")
+        const thisPlayer = new Player();
+
       //ensuring that player in possession cannot pass to themselves, removing them from the players array
       const indexOfPlayerWithPossession = players.indexOf(playerWithPossession)
       let removedPlayer = players.splice(indexOfPlayerWithPossession, 1);
@@ -93,6 +98,8 @@ class Game extends React.Component {
       thisPlayer.attemptPassPhrase(playerWithPossessionName, playerToPassToName);
       this.makePass(playerWithPossession, playerToPassTo, defendingPlayer);
     })
+
+    }.bind(this), 1000);
   }
 
   makePass(passingPlayer, receivingPlayer, defendingPlayer){
@@ -157,7 +164,9 @@ class Game extends React.Component {
   }
 
   gameStart(){
-    setTimeout(function(){ this.setTeamInPossession(); }.bind(this), 1000);
+    setTimeout(function(){ 
+      this.setTeamInPossession(); 
+    }.bind(this), 1000);
   }
 
   timeElapse(){
