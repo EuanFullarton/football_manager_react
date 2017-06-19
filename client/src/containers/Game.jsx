@@ -10,8 +10,8 @@ class Game extends React.Component {
     this.state ={
       teams: [],
       teamBadges: [],
-      possessionFontColor: "",
-      possessionBackgroundColor: "",
+      possessionFontColor: "white",
+      possessionBackgroundColor: "black",
       team1Score: 0,
       team2Score: 0,
       team1Scorers: [],
@@ -227,6 +227,14 @@ class Game extends React.Component {
 
         setTimeout(function(){
           this.timeElapse();
+
+          if(this.state.teamInPossession === this.state.teams[0]){
+            this.setState({teamInPossession: this.state.teams[1]})
+          }
+          else{
+            this.setState({teamInPossession: this.state.teams[0]})
+          }
+
           this.backToCentre();
         }.bind(this), 4000);
 
@@ -249,6 +257,17 @@ class Game extends React.Component {
                   this.setState({commentary: thisCommentary}, () => {
                     setTimeout(function(){
                       this.timeElapse();
+
+                      if(this.state.teamInPossession === this.state.teams[0]){
+                        this.setState({teamInPossession: this.state.teams[1]})
+                      }
+                      else{
+                        this.setState({teamInPossession: this.state.teams[0]})
+                      }
+
+                      const possessionFontColor = this.state.teamInPossession.fontColor;
+                      const possessionBackgroundColor = this.state.teamInPossession.backgroundColor;
+
                       this.backToCentre();
                     }.bind(this), 3500);
                   });
@@ -308,10 +327,13 @@ class Game extends React.Component {
   }
 
   backToCentre(){
+    const possessionFontColor = this.state.teamInPossession.fontColor;
+    const possessionBackgroundColor = this.state.teamInPossession.backgroundColor;
+
     setTimeout(function(){
       let thisCommentary = ("Back to centre");
       console.log("Back to centre");
-      this.setState({commentary: thisCommentary});
+      this.setState({commentary: thisCommentary, possessionFontColor: possessionFontColor , possessionBackgroundColor: possessionBackgroundColor});
     }.bind(this), 1000);
     return;
   }
@@ -329,7 +351,7 @@ class Game extends React.Component {
 
   halfTime(){
     setTimeout(function(){
-      this.setState({commentary: "Half time"})
+      this.setState({commentary: "Half time", possessionFontColor: 'white' , possessionBackgroundColor: 'black'})
       console.log("*****Half time!*****");
     }.bind(this), 3000);
     return;
@@ -337,7 +359,7 @@ class Game extends React.Component {
 
   gameEnd(){
     setTimeout(function(){
-      this.setState({commentary: "Final whistle"})
+      this.setState({commentary: "Final whistle", possessionFontColor: 'white' , possessionBackgroundColor: 'black'})
       console.log("*****There's the final whistle, the game has ended: Real Madrid ", this.state.team1Score + " - Barcelona " + this.state.team2Score + "*****");
     }.bind(this), 3000);
     return;
