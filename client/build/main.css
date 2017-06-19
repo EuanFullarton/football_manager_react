@@ -29,6 +29,10 @@ h1{
   font-size:3em;
 }
 
+#time{
+  text-align: center;
+}
+
 button{
   margin-top:5%;
   background-color: red;

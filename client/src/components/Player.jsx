@@ -1,7 +1,7 @@
 class Player  {
 
   makeMovePhrase(playerName) {
-    const possessionPhrases = ["turns with the ball", "keeps the ball moving", "takes the ball forward", "is forced to hold onto the ball", "holds up the play", "looks for the incisive pass", "runs with the ball", "is allowed to continue his run", "advances down the left", "runs with the ball", "turns sharply", "advances with the ball", "takes the ball over the halfway line", "is still going unchallenged",  "comes forward", "delays playing the ball", "spins on the ball expertly", "looks for options from the back", "looks up", "continues unopposed", "now with the ball", "finds himself with space", "keeps going…"];
+    const possessionPhrases = ["turns with the ball", "keeps the ball moving", "takes the ball forward", "is forced to hold onto the ball", "holds up the play", "looks for the incisive pass", "runs with the ball", "is allowed to continue his run", "advances down the left", "runs with the ball", "turns sharply", "advances with the ball", "takes the ball over the halfway line", "is still going unchallenged",  "comes forward", "delays playing the ball", "spins on the ball expertly", "looks for options from the back", "looks up", "continues unopposed", "finds himself with space", "keeps going…"];
 
     const move = possessionPhrases[Math.floor(Math.random() * possessionPhrases.length)];
     console.log(playerName + " " + move);

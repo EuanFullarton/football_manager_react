@@ -94,23 +94,23 @@ class Game extends React.Component {
       const playerToPassToName = playerToPassTo.name
 
       setTimeout(function(){ 
-      let thisCommentary = thisPlayer.makeMovePhrase(playerWithPossessionName);
-      this.setState({commentary: thisCommentary});
+        let thisCommentary = thisPlayer.makeMovePhrase(playerWithPossessionName);
+        this.setState({commentary: thisCommentary});
       }.bind(this), 1000);
 
       setTimeout(function(){ 
-      let thisCommentary = thisPlayer.makeMovePhrase("He");
-      this.setState({commentary: thisCommentary});
+        let thisCommentary = thisPlayer.makeMovePhrase("He");
+        this.setState({commentary: thisCommentary});
       }.bind(this), 2000);
 
       setTimeout(function(){ 
-      let thisCommentary = thisPlayer.attemptPassPhrase(playerWithPossessionName, playerToPassToName);
-      this.setState({commentary: thisCommentary});
+        let thisCommentary = thisPlayer.attemptPassPhrase(playerWithPossessionName, playerToPassToName);
+        this.setState({commentary: thisCommentary});
       }.bind(this), 3000);
 
       setTimeout(function(){ 
-      let thisCommentary = this.makePass(playerWithPossession, playerToPassTo, defendingPlayer);
-      this.setState({commentary: thisCommentary});
+        let thisCommentary = this.makePass(playerWithPossession, playerToPassTo, defendingPlayer);
+       // this.setState({commentary: thisCommentary});
       }.bind(this), 4000);
 
     })
@@ -125,9 +125,30 @@ class Game extends React.Component {
     const passResult = thisPass.passSuccess(passingPlayer, receivingPlayer, defendingPlayer, teamInPossession, defendingTeam);
 
     this.setState({teamInPossession: passResult[0], defendingTeam: passResult[1], playerInPossession:passResult[2]}, () => {
-      const newDefendingPlayer = this.state.defendingTeam.players[(Math.floor(Math.random() * this.state.defendingTeam.players.length))];
-      const newReceivingPlayer = this.state.teamInPossession.players[(Math.floor(Math.random() * this.state.teamInPossession.players.length))];
-      this.attackingMove(this.state.playerInPossession, newReceivingPlayer, newDefendingPlayer);
+
+      let thisCommentary = passResult[3];
+      console.log("THIS PASS RESULT:", thisCommentary)
+
+      this.setState({commentary: thisCommentary}, () => {
+
+        console.log(this.state);
+
+        const players = this.state.teamInPossession.players;
+        const indexOfPlayerWithPossession = players.indexOf(this.state.playerInPossession)
+        const playerWithPossession = this.state.playerInPossession;
+        const newDefendingPlayer = this.state.defendingTeam.players[(Math.floor(Math.random() * this.state.defendingTeam.players.length))];
+
+        let removedPlayer = players.splice(indexOfPlayerWithPossession, 1);
+        const newReceivingPlayer = players[(Math.floor(Math.random() * players.length))];
+
+        if (newReceivingPlayer === playerWithPossession){
+          newReceivingPlayer = players[(Math.floor(Math.random() * players.length))];
+        }
+
+        players.push(removedPlayer[0])
+
+        this.attackingMove(this.state.playerInPossession, newReceivingPlayer, newDefendingPlayer);
+      });     
     });
   }
 
@@ -135,17 +156,41 @@ class Game extends React.Component {
     const shotProbability = (Math.random() * 100);
     const thisPlayer = new Player();
 
-    thisPlayer.makeMovePhrase(playerInPossession.name);
-    thisPlayer.makeMovePhrase("He");
+    setTimeout(function(){ 
+      let thisCommentary = thisPlayer.makeMovePhrase(playerInPossession.name);
+      this.setState({commentary: thisCommentary});
+    }.bind(this), 1000);
+
+    setTimeout(function(){ 
+      let thisCommentary = thisPlayer.makeMovePhrase("He");
+      this.setState({commentary: thisCommentary});
+    }.bind(this), 2000);
+
+
 
     if (shotProbability <= 25){
       const goalkeeper = this.state.defendingTeam.goalkeeper;
-      thisPlayer.attemptShotPhrase(playerInPossession.name);
-      this.takeShot(playerInPossession, goalkeeper)
+      setTimeout(function(){ 
+        let thisCommentary = thisPlayer.attemptShotPhrase(playerInPossession.name);
+        this.setState({commentary: thisCommentary});
+      }.bind(this), 3000);
+
+      setTimeout(function(){ 
+        let thisCommentary = this.takeShot(playerInPossession, goalkeeper);
+        this.setState({commentary: thisCommentary});
+      }.bind(this), 4000);
+
     }
     else {
-      thisPlayer.attemptPassPhrase(playerInPossession.name, receivingPlayer.name)
-      this.makePass(playerInPossession, receivingPlayer, defendingPlayer);
+      setTimeout(function(){ 
+        let thisCommentary = thisPlayer.attemptPassPhrase(playerInPossession.name, receivingPlayer.name)
+        this.setState({commentary: thisCommentary});
+      }.bind(this), 3000);
+
+      setTimeout(function(){ 
+        let thisCommentary = this.makePass(playerInPossession, receivingPlayer, defendingPlayer);
+      }.bind(this), 4000);
+
     }
   }
 
@@ -154,26 +199,75 @@ class Game extends React.Component {
     const shotResult = thisShot.shotSuccess(playerInPossession, goalkeeper);
     if ((shotResult[0] === true) &&(this.state.teamInPossession.name === "Real Madrid")){
       this.setState({team1Score: (this.state.team1Score + 1), team1Scorers: this.state.team1Scorers + " " + shotResult[2] + ", " + this.state.gameTime}, () => {
-        console.log("*****GOAALLLLL*****");
-        console.log(shotResult[1]);
-        console.log(shotResult[2] + " is the scorer");
-        console.log("Current score: Real Madrid ", this.state.team1Score + " - Barcelona " + this.state.team2Score);
+
+        setTimeout(function(){
+          let thisCommentary = "*****GOAALLLLL*****";
+          console.log("*****GOAALLLLL*****");
+          this.setState({commentary: thisCommentary});
+        }.bind(this), 1000);
+
+        setTimeout(function(){
+          let thisCommentary = (shotResult[1]);
+          console.log(shotResult[1]);
+          this.setState({commentary: thisCommentary});
+        }.bind(this), 2000);
+
+        setTimeout(function(){
+          let thisCommentary = (shotResult[2] + " is the scorer");
+          console.log(shotResult[2] + " is the scorer");
+          this.setState({commentary: thisCommentary});
+        }.bind(this), 3000);
+
+        setTimeout(function(){
+          let thisCommentary = ("Current score: Real Madrid ", this.state.team1Score + " - Barcelona " + this.state.team2Score);
+          console.log("Current score: Real Madrid ", this.state.team1Score + " - Barcelona " + this.state.team2Score);
+          this.setState({commentary: thisCommentary});
+        }.bind(this), 4000);
+
         this.timeElapse();
         this.backToCentre();
       });
     }
     else if ((shotResult[0] === true) &&(this.state.teamInPossession.name === "Barcelona")){
       this.setState({team2Score: (this.state.team2Score + 1), team2Scorers: this.state.team2Scorers + " " + shotResult[2] + ", " + this.state.gameTime}, () => {
-        console.log("*****GOAALLLLL*****");
-        console.log(shotResult[1]);
-        console.log(shotResult[2] + " is the scorer");
-        console.log("Current score: Real Madrid ", this.state.team1Score + " - Barcelona " + this.state.team2Score);
+
+        setTimeout(function(){
+          let thisCommentary = "*****GOAALLLLL*****";
+          console.log("*****GOAALLLLL*****");
+          this.setState({commentary: thisCommentary});
+        }.bind(this), 1000);
+
+        setTimeout(function(){
+          let thisCommentary = (shotResult[1]);
+          console.log(shotResult[1]);
+          this.setState({commentary: thisCommentary});
+        }.bind(this), 2000);
+
+        setTimeout(function(){
+          let thisCommentary = (shotResult[2] + " is the scorer");
+          console.log(shotResult[2] + " is the scorer");
+          this.setState({commentary: thisCommentary});
+        }.bind(this), 3000);
+
+        setTimeout(function(){
+          let thisCommentary = ("Current score: Real Madrid ", this.state.team1Score + " - Barcelona " + this.state.team2Score);
+          console.log("Current score: Real Madrid ", this.state.team1Score + " - Barcelona " + this.state.team2Score);
+          this.setState({commentary: thisCommentary});
+        }.bind(this), 4000);
+
         this.timeElapse();
         this.backToCentre();
       });
     }
     else {
-      console.log(shotResult[1]);
+
+      // setTimeout(function(){
+        let thisCommentary = (shotResult[1]);
+        console.log(shotResult[1]);
+        this.setState({commentary: thisCommentary});
+      // }.bind(this), 1000);
+
+
       this.timeElapse();  
       this.goalKick();
     }
@@ -203,12 +297,20 @@ class Game extends React.Component {
   }
 
   backToCentre(){
-    console.log("Back to centre");
+    setTimeout(function(){
+      let thisCommentary = ("Back to centre");
+      console.log("Back to centre");
+      this.setState({commentary: thisCommentary});
+    }.bind(this), 1000);
     return;
   }
 
   goalKick(){
-    console.log("Out for a goal kick");
+    setTimeout(function(){
+      let thisCommentary = ("Out for a goal kick");
+      console.log("Out for a goal kick");
+      this.setState({commentary: thisCommentary});
+    }.bind(this), 1000);
     return;
   }
 
@@ -230,6 +332,7 @@ class Game extends React.Component {
       <h1>Footsoccerpassball</h1>
       <p id="commentary">{this.state.commentary}</p>
       <p id="scores">{this.state.team1Score + " - " + this.state.team2Score}</p>
+      <p id="time">{this.state.gameTime + "min"}</p>
       <p id="team1Scoresheet">{this.state.team1Scorers}</p>
       <p id="team2Scoresheet">{this.state.team2Scorers}</p>
       <StartGame 
