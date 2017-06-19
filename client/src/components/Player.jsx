@@ -5,6 +5,7 @@ class Player  {
 
     const move = possessionPhrases[Math.floor(Math.random() * possessionPhrases.length)];
     console.log(playerName + " " + move);
+    return (playerName + " " + move);
   }
 
   attemptPassPhrase(player1, player2){
@@ -12,6 +13,7 @@ class Player  {
 
     const pass = passingPhrases[Math.floor(Math.random() * passingPhrases.length)];
     console.log(player1 + " " + pass + " " + player2);
+    return (player1 + " " + pass + " " + player2);
   }
 
   attemptShotPhrase(playerName){
@@ -19,6 +21,7 @@ class Player  {
 
     const shoot = shootingPhrases[Math.floor(Math.random() * shootingPhrases.length)];
     console.log(playerName + " " + shoot);
+    return (playerName + " " + shoot);
   }
 }
 
