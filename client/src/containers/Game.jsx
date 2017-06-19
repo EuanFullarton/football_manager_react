@@ -240,29 +240,21 @@ class Game extends React.Component {
                   console.log(shotResult[2] + " is the scorer");
                   this.setState({commentary: thisCommentary}, () => {
                     setTimeout(function(){
+                      if(this.state.teamInPossession === this.state.teams[0]){
+                        this.setState({teamInPossession: this.state.teams[1]})
+                      }
+                      else{
+                        this.setState({teamInPossession: this.state.teams[0]})
+                      }
                       this.timeElapse();
                       this.backToCentre();
-                    }.bind(this), 4000);
+                    }.bind(this), 3500);
                   });
-                }.bind(this), 3000);
+                }.bind(this), 2500);
               });
-            }.bind(this), 2000);
+            }.bind(this), 1500);
           });
-        }.bind(this), 1000);
-
-        setTimeout(function(){
-          this.timeElapse();
-
-          if(this.state.teamInPossession === this.state.teams[0]){
-            this.setState({teamInPossession: this.state.teams[1]})
-          }
-          else{
-            this.setState({teamInPossession: this.state.teams[0]})
-          }
-
-          this.backToCentre();
-        }.bind(this), 4000);
-
+        }.bind(this), 500);
       });
     }
     else if ((shotResult[0] === true) &&(this.state.teamInPossession === this.state.teams[1])){
@@ -367,7 +359,7 @@ class Game extends React.Component {
           return;
         }
         else if ((this.state.gameTime >= 90) && (this.state.gameTime <= 95)){
-          this.endGame();
+          this.gameEnd();
           return;
         }
         else {
@@ -434,7 +426,7 @@ class Game extends React.Component {
     setTimeout(function(){
       this.setState({commentary: "Final whistle", possessionFontColor: 'white' , possessionBackgroundColor: 'black'})
       console.log("*****There's the final whistle, the game has ended: Real Madrid ", this.state.team1Score + " - Barcelona " + this.state.team2Score + "*****");
-    }.bind(this), 3000);
+    }.bind(this), 4000);
     return;
   }
 
