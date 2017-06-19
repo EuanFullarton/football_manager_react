@@ -157,7 +157,7 @@ class Game extends React.Component {
   }
 
   gameStart(){
-    this.setTeamInPossession();
+    setTimeout(function(){ this.setTeamInPossession(); }.bind(this), 1000);
   }
 
   timeElapse(){
