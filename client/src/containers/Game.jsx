@@ -10,6 +10,8 @@ class Game extends React.Component {
     this.state ={
       teams: [],
       teamBadges: [],
+      possessionFontColor: "",
+      possessionBackgroundColor: "",
       team1Score: 0,
       team2Score: 0,
       team1Scorers: [],
@@ -46,6 +48,8 @@ class Game extends React.Component {
   setTeamInPossession(){
     const teams = this.state.teams;
     let teamWithPossession = teams[Math.round(Math.random())];
+    const possessionFontColor = teamWithPossession.fontColor;
+    const possessionBackgroundColor = teamWithPossession.backgroundColor;
     let defendingTeam = "";
     if (teamWithPossession === teams[0]){
       defendingTeam = teams[1];
@@ -55,7 +59,7 @@ class Game extends React.Component {
     }
 
     this.setState({teamInPossession: teamWithPossession, defendingTeam: defendingTeam}, () => {
-      this.setState({commentary: this.state.teamInPossession.name + " in possession"});
+      this.setState({commentary: this.state.teamInPossession.name + " in possession", possessionFontColor: possessionFontColor , possessionBackgroundColor: possessionBackgroundColor});
       console.log(this.state.teamInPossession.name + " in possession")
       this.setPlayerinPossession()
     });
@@ -123,11 +127,14 @@ class Game extends React.Component {
     const defendingTeam = this.state.defendingTeam;
     const passResult = thisPass.passSuccess(passingPlayer, receivingPlayer, defendingPlayer, teamInPossession, defendingTeam);
 
+
     this.setState({teamInPossession: passResult[0], defendingTeam: passResult[1], playerInPossession:passResult[2]}, () => {
 
       let thisCommentary = passResult[3];
+      const possessionFontColor = this.state.teamInPossession.fontColor;
+      const possessionBackgroundColor = this.state.teamInPossession.backgroundColor;
 
-      this.setState({commentary: thisCommentary}, () => {
+      this.setState({commentary: thisCommentary, possessionFontColor: possessionFontColor , possessionBackgroundColor: possessionBackgroundColor}, () => {
 
         const players = this.state.teamInPossession.players;
         const indexOfPlayerWithPossession = players.indexOf(this.state.playerInPossession)
@@ -255,9 +262,19 @@ class Game extends React.Component {
     }
     else {
 
+      if(this.state.teamInPossession === this.state.teams[0]){
+        this.setState({teamInPossession: this.state.teams[1]})
+      }
+      else{
+        this.setState({teamInPossession: this.state.teams[0]})
+      }
+
+      const possessionFontColor = this.state.teamInPossession.fontColor;
+      const possessionBackgroundColor = this.state.teamInPossession.backgroundColor;
+
       let thisCommentary = (shotResult[1]);
       console.log(shotResult[1]);
-      this.setState({commentary: thisCommentary});
+      this.setState({commentary: thisCommentary, possessionFontColor: possessionFontColor , possessionBackgroundColor: possessionBackgroundColor});
 
       this.timeElapse();  
       this.goalKick();
@@ -327,10 +344,16 @@ class Game extends React.Component {
   }
 
   render(){
+
+    const commentaryStyle = {
+      'color': this.state.possessionFontColor, 
+      'backgroundColor': this.state.possessionBackgroundColor
+    }
+
     return(
       <div>
       <h1>Footsoccerpassball</h1>
-      <p id="commentary">{this.state.commentary}</p>
+      <p id="commentary" style={commentaryStyle}>{this.state.commentary}</p>
       <p id="scores">{this.state.team1Score + " - " + this.state.team2Score}</p>
       <p id="time">{this.state.gameTime + "min"}</p>
       <p id="team1Scoresheet">{this.state.team1Scorers}</p>
