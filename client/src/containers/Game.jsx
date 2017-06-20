@@ -138,12 +138,6 @@ class Game extends React.Component {
 
       setTimeout(function(){ 
 
-        if (this.state.teamInPossession === this.state.teams[0]){
-          this.setState({team1Passes: (this.state.team1Passes + 1)});
-        }
-        else {
-          this.setState({team2Passes: (this.state.team2Passes + 1)})
-        }
         let thisCommentary = this.makePass(playerWithPossession, playerToPassTo, defendingPlayer);
       }.bind(this), 4000);
 
@@ -166,17 +160,31 @@ class Game extends React.Component {
       const team1Possession = possessionPercentageReturns[0];
       const team2Possession = possessionPercentageReturns[1];
 
-      const totalPasses = ((this.state.team1Passes) + (this.state.team2Passes));
-      const passingPercentageReturns = stats.calculatePercentage(this.state.team1Passes, totalPasses);
-      const team1PassingPercentage = passingPercentageReturns[0];
-      const team2PassingPercentage = passingPercentageReturns[1];
+
 
 
       if (this.state.teamInPossession === this.state.teams[0]){
-        this.setState({team1Possession: (this.state.team1Possession + 1), team1PossessionPercentage: team1Possession, team2PossessionPercentage: team2Possession, team1Passes: (this.state.team1Passes + 1), team1PassingPercentage: team1PassingPercentage, team2PassingPercentage: team2PassingPercentage});
+
+        const totalPasses = ((this.state.team1Passes + 1) + (this.state.team2Passes));
+
+        const passingPercentageReturns = stats.calculatePercentage(this.state.team1Passes + 1, totalPasses);
+        const team1PassingPercentage = passingPercentageReturns[0];
+        const team2PassingPercentage = passingPercentageReturns[1];
+
+        this.setState({team1Possession: (this.state.team1Possession + 1), team1PossessionPercentage: team1Possession, team2PossessionPercentage: team2Possession, team1Passes: (this.state.team1Passes + 1), team1PassingPercentage: team1PassingPercentage, team2PassingPercentage: team2PassingPercentage},() => {
+        });
+
       }
       else {
-        this.setState({team2Possession: (this.state.team2Possession + 1), team1PossessionPercentage: team1Possession, team2PossessionPercentage: team2Possession, team2Passes:(this.state.team2Passes + 1), team1PassingPercentage: team1PassingPercentage, team2PassingPercentage: team2PassingPercentage});
+
+        const totalPasses = ((this.state.team1Passes) + (this.state.team2Passes + 1));
+
+        const passingPercentageReturns = stats.calculatePercentage(this.state.team1Passes, totalPasses);
+        const team1PassingPercentage = passingPercentageReturns[0];
+        const team2PassingPercentage = passingPercentageReturns[1];
+
+        this.setState({team2Possession: (this.state.team2Possession + 1), team1PossessionPercentage: team1Possession, team2PossessionPercentage: team2Possession, team2Passes:(this.state.team2Passes + 1), team1PassingPercentage: team1PassingPercentage, team2PassingPercentage: team2PassingPercentage}, () => {
+        });
       }
 
       if (((this.state.gameTime < 45) && (this.state.half === "first")) || (this.state.gameTime < 90) && (this.state.half === "second")){
