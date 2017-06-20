@@ -10,13 +10,14 @@ body{
 h1{
   text-align: center;
   padding:5%;
+  margin-top:-2%;
 }
 
 #commentary{
   height:20%;
   width:80%;
   margin:auto;
-  margin-top:-1%;
+  margin-top:-3%;
   text-align: center;
   font-size: 2em;
   padding:5%;
@@ -34,6 +35,8 @@ h1{
 #time{
   text-align: center;
   font-size: 1.5em;
+  margin-top:-2%;
+  margin-bottom: 2%;
 }
 
 button{
@@ -62,6 +65,12 @@ button{
   height:30%;
 }
 
+.statHeader{
+  margin-top:1%;
+  margin-bottom: 1%;
+  text-align: center;
+}
+
 .possession{
   text-align:center;
   margin-top:-1%;
@@ -86,4 +95,5 @@ button{
 #stats{
   width:50%;
   margin:auto;
+  margin-top:-1%;
 }

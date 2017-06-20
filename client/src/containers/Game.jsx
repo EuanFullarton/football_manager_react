@@ -543,12 +543,15 @@ render(){
     <p id="scores">{this.state.team1Score + " - " + this.state.team2Score}</p>
     <p id="time">{this.state.gameTime + "min"}</p>
     <div id="stats">
-    <p id="team1PossessionBar" className="possession" style={Possession1}>{this.state.team1PossessionPercentage}</p>
-    <p id="team2PossessionBar" className="possession" style={Possession2}>{this.state.team2PossessionPercentage}</p>
-    <p id="team1PassingBar" className="passing" style={Passes1}>{this.state.team1Passes}</p>
-    <p id="team2PassingBar" className="passing" style={Passes2}>{this.state.team2Passes}</p>
-    <p id="team1PassingBar" className="shots" style={Shots1}>{this.state.team1Shots}</p>
-    <p id="team2PassingBar" className="shots" style={Shots2}>{this.state.team2Shots}</p>
+    <p className="statHeader">Possession</p>
+    <p className="possession" style={Possession1}>{this.state.team1PossessionPercentage}</p>
+    <p className="possession" style={Possession2}>{this.state.team2PossessionPercentage}</p>
+    <p className="statHeader">Passing</p>
+    <p className="passing" style={Passes1}>{this.state.team1Passes}</p>
+    <p className="passing" style={Passes2}>{this.state.team2Passes}</p>
+    <p className="statHeader">Shots</p>
+    <p className="shots" style={Shots1}>{this.state.team1Shots}</p>
+    <p className="shots" style={Shots2}>{this.state.team2Shots}</p>
     </div>
     <p id="team1Scoresheet">{this.state.team1Scorers}</p>
     <p id="team2Scoresheet">{this.state.team2Scorers}</p>
