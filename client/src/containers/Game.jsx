@@ -16,6 +16,8 @@ class Game extends React.Component {
       team2Score: 0,
       team1Scorers: [],
       team2Scorers: [],
+      team1Possession: 0,
+      team2Possession: 0,
       teamInPossession: "",
       defendingTeam: "",
       playerInPossession: "",
@@ -53,9 +55,11 @@ class Game extends React.Component {
     const possessionBackgroundColor = teamWithPossession.backgroundColor;
     let defendingTeam = "";
     if (teamWithPossession === teams[0]){
+      this.setState({team1Possession: (this.state.team1Possession + 1)});
       defendingTeam = teams[1];
     }
     else {
+      this.setState({team2Possession: (this.state.team2Possession + 1)});
       defendingTeam = teams[0];
     }
 
@@ -63,6 +67,9 @@ class Game extends React.Component {
       this.setState({commentary: this.state.teamInPossession.name + " in possession", possessionFontColor: possessionFontColor , possessionBackgroundColor: possessionBackgroundColor});
       console.log(this.state.teamInPossession.name + " in possession")
       this.setPlayerinPossession()
+
+      console.log("TEAM 1 POSSESSION: ", this.state.team1Possession);
+      console.log("TEAM 2 POSSESSION: ", this.state.team2Possession);
     });
   }
 
@@ -130,6 +137,17 @@ class Game extends React.Component {
 
 
     this.setState({teamInPossession: passResult[0], defendingTeam: passResult[1], playerInPossession:passResult[2]}, () => {
+
+      if (this.state.teamInPossession === this.state.teams[0]){
+        this.setState({team1Possession: (this.state.team1Possession + 1)});
+      }
+      else {
+        this.setState({team2Possession: (this.state.team2Possession + 1)});
+      }
+
+      console.log("TEAM 1 POSSESSION: ", this.state.team1Possession);
+      console.log("TEAM 2 POSSESSION: ", this.state.team2Possession);
+
 
       if (((this.state.gameTime < 45) && (this.state.half === "first")) || (this.state.gameTime < 90) && (this.state.half === "second")){
         this.setState({gameTime: (this.state.gameTime += 1)});
@@ -318,10 +336,10 @@ class Game extends React.Component {
     else {
 
       if(this.state.teamInPossession === this.state.teams[0]){
-        this.setState({teamInPossession: this.state.teams[1]})
+        this.setState({teamInPossession: this.state.teams[1], team2Possession: (this.state.team2Possession + 1)})
       }
       else{
-        this.setState({teamInPossession: this.state.teams[0]})
+        this.setState({teamInPossession: this.state.teams[0], team1Possession: (this.state.team1Possession + 1)})
       }
 
       const possessionFontColor = this.state.teamInPossession.fontColor;
