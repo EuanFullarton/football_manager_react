@@ -61,3 +61,15 @@ button{
   width:17%;
   height:30%;
 }
+
+.possession{
+  text-align:center;
+  margin-top:-1%;
+  margin:auto;
+  display: inline-block;
+}
+
+#stats{
+  width:50%;
+  margin:auto;
+}
