@@ -154,14 +154,16 @@ class Game extends React.Component {
 
     this.setState({teamInPossession: passResult[0], defendingTeam: passResult[1], playerInPossession:passResult[2]}, () => {
 
+      if (this.state.teamInPossession !== teamInPossession){
+        const miss = document.getElementById("miss");
+        miss.play();
+      }
+
       const stats = new MatchStats();
       const totalPossession = ((this.state.team1Possession) + (this.state.team2Possession));
       const possessionPercentageReturns = stats.calculatePercentage(this.state.team1Possession, totalPossession);
       const team1Possession = possessionPercentageReturns[0];
       const team2Possession = possessionPercentageReturns[1];
-
-
-
 
       if (this.state.teamInPossession === this.state.teams[0]){
 
@@ -265,6 +267,9 @@ class Game extends React.Component {
 
     if ((shotResult[0] === true) &&(this.state.teamInPossession === this.state.teams[0])){
 
+      const goalCheer = document.getElementById("goalCheer");
+      goalCheer.play();
+
       const totalShots = ((this.state.team1Shots + 1) + (this.state.team2Shots));
       const shootingPercentageReturns = stats.calculatePercentage(this.state.team1Shots + 1, totalShots);
       const team1ShootingPercentage = shootingPercentageReturns[0];
@@ -324,6 +329,9 @@ class Game extends React.Component {
       });
     }
     else if ((shotResult[0] === true) &&(this.state.teamInPossession === this.state.teams[1])){
+
+      const goalCheer = document.getElementById("goalCheer");
+      goalCheer.play();
 
       const totalShots = ((this.state.team1Shots) + (this.state.team2Shots + 1));
 
@@ -391,6 +399,9 @@ class Game extends React.Component {
     }
     else {
 
+      const miss = document.getElementById("miss");
+      miss.play();
+
       const possessionStats = new MatchStats();
       const totalPossession = ((this.state.team1Possession) + (this.state.team2Possession));
       const possessionPercentageReturns = possessionStats.calculatePercentage(this.state.team1Possession, totalPossession);
@@ -431,6 +442,11 @@ class Game extends React.Component {
   }
 
   gameStart(){
+    const startWhistle = document.getElementById("startWhistle");
+    const playCrowd = document.getElementById("audio");
+    startWhistle.play();
+    playCrowd.play();
+
     setTimeout(function(){ 
       this.setTeamInPossession(); 
     }.bind(this), 1000);
@@ -510,6 +526,10 @@ class Game extends React.Component {
 
   halfTime(){
     setTimeout(function(){
+      const playCrowd = document.getElementById("audio");
+      const whistle = document.getElementById("startWhistle");
+      whistle.play();
+      playCrowd.pause();
       this.setState({gameTime: 45, commentary: "Half time", possessionFontColor: 'white' , possessionBackgroundColor: 'black', half: "second"})
       console.log("*****Half time!*****");
     }.bind(this), 4000);
@@ -518,8 +538,12 @@ class Game extends React.Component {
 
   gameEnd(){
     setTimeout(function(){
+      const finalWhistle = document.getElementById("finalWhistle");
+      finalWhistle.play();
       this.setState({commentary: "Final whistle", possessionFontColor: 'white' , possessionBackgroundColor: 'black'})
       console.log("*****There's the final whistle, the game has ended: Real Madrid ", this.state.team1Score + " - Barcelona " + this.state.team2Score + "*****");
+      const playCrowd = document.getElementById("audio");
+      playCrowd.pause();
     }.bind(this), 4000);
     return;
   }
@@ -571,6 +595,21 @@ class Game extends React.Component {
     return(
       <div>
       <h1>Footsoccerpassball</h1>
+      <audio id="audio">
+      <source src="./sounds/crowd.ogg" type="audio/ogg"/>
+      </audio>
+      <audio id="startWhistle">
+      <source src="./sounds/refWhistle.ogg" type="audio/ogg"/>
+      </audio>
+      <audio id="goalCheer">
+      <source src="./sounds/goal.ogg" type="audio/ogg"/>
+      </audio>
+      <audio id="miss">
+      <source src="./sounds/miss.ogg" type="audio/ogg"/>
+      </audio>
+      <audio id="finalWhistle">
+      <source src="./sounds/finalWhistle.ogg" type="audio/ogg"/>
+      </audio>
       <p id="commentary" style={commentaryStyle}>{this.state.commentary}</p>
       <p id="scores">{this.state.team1Score + " - " + this.state.team2Score}</p>
       <p id="time">{this.state.gameTime + "min"}</p>
