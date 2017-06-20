@@ -69,6 +69,20 @@ button{
   display: inline-block;
 }
 
+.passing{
+  text-align:center;
+  margin-top:-1%;
+  margin:auto;
+  display: inline-block;
+}
+
+.shots{
+  text-align:center;
+  margin-top:-1%;
+  margin:auto;
+  display: inline-block;
+}
+
 #stats{
   width:50%;
   margin:auto;

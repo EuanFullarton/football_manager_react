@@ -1,8 +1,8 @@
 class MatchStats {
 
-  calculatePossession(teamPossession, possessionTotal){
-     const onePercent = (possessionTotal / 100);
-     const team1Percentage = Math.round(teamPossession / onePercent);
+  calculatePercentage(teamCount, countTotal){
+     const onePercent = (countTotal / 100);
+     const team1Percentage = Math.round(teamCount / onePercent);
      const team2Percentage = (100 - Math.round(team1Percentage));
 
      return [team1Percentage, team2Percentage];
