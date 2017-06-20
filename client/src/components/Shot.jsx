@@ -10,7 +10,7 @@ class Shot {
     const thisGoalkeeperRating = goalkeeperAllRatings[(Math.floor(Math.random() * 3))] 
 
     if (playerShootingRating > thisGoalkeeperRating){
-      const goals = ["What a goal!", "It's a goal, there was no stopping that!", "Absolute screamer!", "Tucks it away confidently!", "Right in the top corner!", "Sensational! He's chipped the keeper!", "Cool as you like, he's slotted it into the net", "He's made that look easy, brilliant strike"]
+      const goals = ["What a goal!", "It's a goal, there was no stopping that!", "Absolute screamer!", "Tucks it away confidently!", "Right in the top corner!", "Sensational! He's chipped the keeper!", "Cool as you like, he's slotted it into the net", "He's made that look easy, brilliant strike", "It's scrappy, but they'll take it!", "Oh dear, the keeper totally misjudged that!"]
       const thisGoal = goals[(Math.floor(Math.random() * goals.length))];
       return [true, thisGoal, playerInPossession.name];
     }

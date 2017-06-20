@@ -124,22 +124,22 @@ class Game extends React.Component {
       setTimeout(function(){ 
         let thisCommentary = thisPlayer.makeMovePhrase(playerWithPossessionName);
         this.setState({commentary: thisCommentary});
-      }.bind(this), 1000);
+      }.bind(this), 1200);
 
       setTimeout(function(){ 
         let thisCommentary = thisPlayer.makeMovePhrase("He");
         this.setState({commentary: thisCommentary});
-      }.bind(this), 2000);
+      }.bind(this), 2400);
 
       setTimeout(function(){ 
         let thisCommentary = thisPlayer.attemptPassPhrase(playerWithPossessionName, playerToPassToName);
         this.setState({commentary: thisCommentary});
-      }.bind(this), 3000);
+      }.bind(this), 3600);
 
       setTimeout(function(){ 
 
         let thisCommentary = this.makePass(playerWithPossession, playerToPassTo, defendingPlayer);
-      }.bind(this), 4000);
+      }.bind(this), 4800);
 
     })
 
