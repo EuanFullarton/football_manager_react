@@ -4,7 +4,7 @@ import Pass from '../components/Pass';
 import Shot from '../components/Shot';
 import StartGame from '../components/StartGame'
 import MatchStats from '../components/MatchStats'
-import TeamInPossession from '../components/TeamInPossession'
+import setPossession from '../components/setPossession'
 
 class Game extends React.Component {
   constructor(props){
@@ -63,11 +63,11 @@ class Game extends React.Component {
     request.send(null);
   }
 
-  setTeamInPossession(){
+  setPossession(){
     let defendingTeam = "";
 
-    const findTeamInPossession = new TeamInPossession();
-    const thisTeamInPossession = findTeamInPossession.set(this.state.teams)
+    const setThisPossession = new setPossession();
+    const thisTeamInPossession = setThisPossession.setTeam(this.state.teams)
 
     if (thisTeamInPossession[0] === this.state.teams[0]){
       this.setState({team1Possession: (this.state.team1Possession + 1)});
@@ -78,7 +78,7 @@ class Game extends React.Component {
       defendingTeam = this.state.teams[0];
     }
 
-    const possessionStats = findTeamInPossession.calculate(this.state.team1Possession, this.state.team2Possession); 
+    const possessionStats = setThisPossession.calculatePercentage(this.state.team1Possession, this.state.team2Possession); 
 
     this.setState({
       teamInPossession: thisTeamInPossession[0], 
@@ -90,66 +90,41 @@ class Game extends React.Component {
           commentary: this.state.teamInPossession.name + " in possession", possessionFontColor: thisTeamInPossession[1], 
           possessionBackgroundColor: thisTeamInPossession[2]});
         
-        this.setPlayerinPossession()
+        const setPlayerInPossession = setThisPossession.setPlayer(this.state.teamInPossession, this.state.defendingTeam)     
+
+        setTimeout(function(){ 
+          this.setState({playerInPossession: setPlayerInPossession[0]}, () => {
+            this.setState({commentary: this.state.playerInPossession.name + " has the ball"});
+
+            const thisPlayer = new Player();
+            const playerInPossessionName = this.state.playerInPossession.name;
+            const playerToPassToName = setPlayerInPossession[1].name;
+
+            setTimeout(function(){ 
+              let thisCommentary = thisPlayer.makeMovePhrase(playerInPossessionName);
+              this.setState({commentary: thisCommentary});
+            }.bind(this), 1200);
+
+            setTimeout(function(){ 
+              let thisCommentary = thisPlayer.makeMovePhrase("He");
+              this.setState({commentary: thisCommentary});
+            }.bind(this), 2400);
+
+            setTimeout(function(){ 
+              let thisCommentary = thisPlayer.attemptPassPhrase(playerInPossessionName, playerToPassToName);
+              this.setState({commentary: thisCommentary});
+            }.bind(this), 3600);
+
+            setTimeout(function(){ 
+              let thisCommentary = this.makePass(setPlayerInPossession[0], setPlayerInPossession[1], setPlayerInPossession[2]);
+            }.bind(this), 4800);
+          })
+        }.bind(this), 1000);
       });
   }
 
-  setPlayerinPossession(){
-    const players = this.state.teamInPossession.players;
-    const playerWithPossession = players[(Math.floor(Math.random() * players.length))];
 
-    const playerWithPossessionName = playerWithPossession.name
-    const defendingPlayers = this.state.defendingTeam.players;
-    const defendingPlayer = defendingPlayers[(Math.floor(Math.random() * players.length))];
-    
-
-    setTimeout(function(){ 
-
-      this.setState({playerInPossession: playerWithPossession}, () => {
-        this.setState({commentary: this.state.playerInPossession.name + " has the ball"});
-
-        console.log(playerWithPossessionName + " has the ball")
-        const thisPlayer = new Player();
-
-      //ensuring that player in possession cannot pass to themselves, removing them from the players array
-      const indexOfPlayerWithPossession = players.indexOf(playerWithPossession)
-      let removedPlayer = players.splice(indexOfPlayerWithPossession, 1);
-      let playerToPassTo = players[(Math.floor(Math.random() * players.length))];
-
-      //this for when attackingMove() calls the function
-      if (playerToPassTo === playerWithPossession){
-        playerToPassTo = players[(Math.floor(Math.random() * players.length))];
-      }
-
-      //adding the player back into the array
-      players.push(removedPlayer[0])
-
-      const playerToPassToName = playerToPassTo.name
-
-      setTimeout(function(){ 
-        let thisCommentary = thisPlayer.makeMovePhrase(playerWithPossessionName);
-        this.setState({commentary: thisCommentary});
-      }.bind(this), 1200);
-
-      setTimeout(function(){ 
-        let thisCommentary = thisPlayer.makeMovePhrase("He");
-        this.setState({commentary: thisCommentary});
-      }.bind(this), 2400);
-
-      setTimeout(function(){ 
-        let thisCommentary = thisPlayer.attemptPassPhrase(playerWithPossessionName, playerToPassToName);
-        this.setState({commentary: thisCommentary});
-      }.bind(this), 3600);
-
-      setTimeout(function(){ 
-
-        let thisCommentary = this.makePass(playerWithPossession, playerToPassTo, defendingPlayer);
-      }.bind(this), 4800);
-
-    })
-
-    }.bind(this), 1000);
-  }
+  
 
   makePass(passingPlayer, receivingPlayer, defendingPlayer){
     const thisPass = new Pass();
@@ -222,22 +197,22 @@ class Game extends React.Component {
           possessionFontColor: possessionFontColor, 
           possessionBackgroundColor: possessionBackgroundColor}, () => {
 
-          const players = this.state.teamInPossession.players;
-          const indexOfPlayerWithPossession = players.indexOf(this.state.playerInPossession)
-          const playerWithPossession = this.state.playerInPossession;
-          const newDefendingPlayer = this.state.defendingTeam.players[(Math.floor(Math.random() * this.state.defendingTeam.players.length))];
+            const players = this.state.teamInPossession.players;
+            const indexOfPlayerWithPossession = players.indexOf(this.state.playerInPossession)
+            const playerWithPossession = this.state.playerInPossession;
+            const newDefendingPlayer = this.state.defendingTeam.players[(Math.floor(Math.random() * this.state.defendingTeam.players.length))];
 
-          let removedPlayer = players.splice(indexOfPlayerWithPossession, 1);
-          const newReceivingPlayer = players[(Math.floor(Math.random() * players.length))];
+            let removedPlayer = players.splice(indexOfPlayerWithPossession, 1);
+            const newReceivingPlayer = players[(Math.floor(Math.random() * players.length))];
 
-          if (newReceivingPlayer === playerWithPossession){
-            newReceivingPlayer = players[(Math.floor(Math.random() * players.length))];
-          }
+            if (newReceivingPlayer === playerWithPossession){
+              newReceivingPlayer = players[(Math.floor(Math.random() * players.length))];
+            }
 
-          players.push(removedPlayer[0])
+            players.push(removedPlayer[0])
 
-          this.attackingMove(this.state.playerInPossession, newReceivingPlayer, newDefendingPlayer);
-        });     
+            this.attackingMove(this.state.playerInPossession, newReceivingPlayer, newDefendingPlayer);
+          });     
       });
   }
 
@@ -315,32 +290,32 @@ class Game extends React.Component {
               const possessionFontColor = this.state.teamInPossession.fontColor;
               const possessionBackgroundColor = this.state.teamInPossession.backgroundColor;
 
-           this.goalFlash();
+              this.goalFlash();
 
 
-            setTimeout(function(){
-              let thisCommentary = (shotResult[1]);
-              console.log(shotResult[1]);
-              this.setState({commentary: thisCommentary}, () => {
-                setTimeout(function(){
-                  let thisCommentary = (shotResult[2] + " is the scorer");
-                  console.log(shotResult[2] + " is the scorer");
-                  this.setState({commentary: thisCommentary}, () => {
-                    setTimeout(function(){
-                      if(this.state.teamInPossession === this.state.teams[0]){
-                        this.setState({teamInPossession: this.state.teams[1]})
-                      }
-                      else{
-                        this.setState({teamInPossession: this.state.teams[0]})
-                      }
-                      this.timeElapse();
-                      this.backToCentre();
-                    }.bind(this), 3500);
-                  });
-                }.bind(this), 2500);
-              });
-            }.bind(this), 1500);
-          });
+              setTimeout(function(){
+                let thisCommentary = (shotResult[1]);
+                console.log(shotResult[1]);
+                this.setState({commentary: thisCommentary}, () => {
+                  setTimeout(function(){
+                    let thisCommentary = (shotResult[2] + " is the scorer");
+                    console.log(shotResult[2] + " is the scorer");
+                    this.setState({commentary: thisCommentary}, () => {
+                      setTimeout(function(){
+                        if(this.state.teamInPossession === this.state.teams[0]){
+                          this.setState({teamInPossession: this.state.teams[1]})
+                        }
+                        else{
+                          this.setState({teamInPossession: this.state.teams[0]})
+                        }
+                        this.timeElapse();
+                        this.backToCentre();
+                      }.bind(this), 3500);
+                    });
+                  }.bind(this), 2500);
+                });
+              }.bind(this), 1500);
+            });
           }.bind(this), 500);
         });
     }
@@ -371,37 +346,37 @@ class Game extends React.Component {
               const possessionFontColor = this.state.teamInPossession.fontColor;
               const possessionBackgroundColor = this.state.teamInPossession.backgroundColor;
 
-            this.goalFlash();
+              this.goalFlash();
 
 
-            setTimeout(function(){
-              let thisCommentary = (shotResult[1]);
-              console.log(shotResult[1]);
-              this.setState({commentary: thisCommentary}, () => {
-                setTimeout(function(){
-                  let thisCommentary = (shotResult[2] + " is the scorer");
-                  console.log(shotResult[2] + " is the scorer");
-                  this.setState({commentary: thisCommentary}, () => {
-                    setTimeout(function(){
-                      this.timeElapse();
+              setTimeout(function(){
+                let thisCommentary = (shotResult[1]);
+                console.log(shotResult[1]);
+                this.setState({commentary: thisCommentary}, () => {
+                  setTimeout(function(){
+                    let thisCommentary = (shotResult[2] + " is the scorer");
+                    console.log(shotResult[2] + " is the scorer");
+                    this.setState({commentary: thisCommentary}, () => {
+                      setTimeout(function(){
+                        this.timeElapse();
 
-                      if(this.state.teamInPossession === this.state.teams[0]){
-                        this.setState({teamInPossession: this.state.teams[1]})
-                      }
-                      else{
-                        this.setState({teamInPossession: this.state.teams[0]})
-                      }
+                        if(this.state.teamInPossession === this.state.teams[0]){
+                          this.setState({teamInPossession: this.state.teams[1]})
+                        }
+                        else{
+                          this.setState({teamInPossession: this.state.teams[0]})
+                        }
 
-                      const possessionFontColor = this.state.teamInPossession.fontColor;
-                      const possessionBackgroundColor = this.state.teamInPossession.backgroundColor;
+                        const possessionFontColor = this.state.teamInPossession.fontColor;
+                        const possessionBackgroundColor = this.state.teamInPossession.backgroundColor;
 
-                      this.backToCentre();
-                    }.bind(this), 3500);
-                  });
-                }.bind(this), 2500);
-              });
-            }.bind(this), 1500);
-          });
+                        this.backToCentre();
+                      }.bind(this), 3500);
+                    });
+                  }.bind(this), 2500);
+                });
+              }.bind(this), 1500);
+            });
           }.bind(this), 500);
 
         });
@@ -498,7 +473,7 @@ class Game extends React.Component {
     playCrowd.play();
 
     setTimeout(function(){ 
-      this.setTeamInPossession(); 
+      this.setPossession(); 
     }.bind(this), 1000);
   }
 
