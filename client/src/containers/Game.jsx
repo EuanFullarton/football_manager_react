@@ -594,7 +594,7 @@ class Game extends React.Component {
 
     return(
       <div>
-      <h1>Footsoccerpassball</h1>
+      <h1>Soccer Simulator 2017</h1>
       <audio id="audio">
       <source src="./sounds/crowd.ogg" type="audio/ogg"/>
       </audio>
