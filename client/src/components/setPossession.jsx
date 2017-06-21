@@ -1,7 +1,7 @@
 import MatchStats from './MatchStats';
 import Player from './Player';
 
-class TeamInPossession {
+class SetPossession {
 
   setTeam(teams){
     const teamWithPossession = teams[Math.round(Math.random())];
@@ -44,4 +44,4 @@ class TeamInPossession {
   }
 }
 
-export default TeamInPossession;
+export default SetPossession;

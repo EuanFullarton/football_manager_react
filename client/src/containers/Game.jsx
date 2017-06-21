@@ -4,7 +4,7 @@ import Pass from '../components/Pass';
 import Shot from '../components/Shot';
 import StartGame from '../components/StartGame'
 import MatchStats from '../components/MatchStats'
-import setPossession from '../components/setPossession'
+import SetPossession from '../components/SetPossession'
 
 class Game extends React.Component {
   constructor(props){
@@ -66,7 +66,7 @@ class Game extends React.Component {
   setPossession(){
     let defendingTeam = "";
 
-    const setThisPossession = new setPossession();
+    const setThisPossession = new SetPossession();
     const thisTeamInPossession = setThisPossession.setTeam(this.state.teams)
 
     if (thisTeamInPossession[0] === this.state.teams[0]){
@@ -124,8 +124,6 @@ class Game extends React.Component {
   }
 
 
-  
-
   makePass(passingPlayer, receivingPlayer, defendingPlayer){
     const thisPass = new Pass();
     const teamInPossession = this.state.teamInPossession;
@@ -143,6 +141,7 @@ class Game extends React.Component {
         }
 
         const stats = new MatchStats();
+
         const totalPossession = ((this.state.team1Possession) + (this.state.team2Possession));
         const possessionPercentageReturns = stats.calculatePercentage(this.state.team1Possession, totalPossession);
         const team1Possession = possessionPercentageReturns[0];
@@ -229,7 +228,6 @@ class Game extends React.Component {
       let thisCommentary = thisPlayer.makeMovePhrase("He");
       this.setState({commentary: thisCommentary});
     }.bind(this), 2000);
-
 
 
     if (shotProbability <= 25){
