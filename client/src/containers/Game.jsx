@@ -4,6 +4,7 @@ import Pass from '../components/Pass';
 import Shot from '../components/Shot';
 import StartGame from '../components/StartGame'
 import MatchStats from '../components/MatchStats'
+import TeamInPossession from '../components/TeamInPossession'
 
 class Game extends React.Component {
   constructor(props){
@@ -60,31 +61,24 @@ class Game extends React.Component {
   }
 
   setTeamInPossession(){
-    const teams = this.state.teams;
-    let teamWithPossession = teams[Math.round(Math.random())];
-    const possessionFontColor = teamWithPossession.fontColor;
-    const possessionBackgroundColor = teamWithPossession.backgroundColor;
     let defendingTeam = "";
-    if (teamWithPossession === teams[0]){
+
+    const findTeamInPossession = new TeamInPossession();
+    const thisTeamInPossession = findTeamInPossession.set(this.state.teams)
+
+    if (thisTeamInPossession[0] === this.state.teams[0]){
       this.setState({team1Possession: (this.state.team1Possession + 1)});
-      defendingTeam = teams[1];
+      defendingTeam = this.state.teams[1];
     }
     else {
       this.setState({team2Possession: (this.state.team2Possession + 1)});
-      defendingTeam = teams[0];
+      defendingTeam = this.state.teams[0];
     }
 
-    const stats = new MatchStats();
-    const totalPossession = ((this.state.team1Possession) + (this.state.team2Possession));
-    const percentageReturns = stats.calculatePercentage(this.state.team1Possession, totalPossession);
+    const possessionStats = findTeamInPossession.calculate(this.state.team1Possession, this.state.team2Possession); 
 
-    const team1Possession = percentageReturns[0];
-    const team2Possession = percentageReturns[1];
-
-
-    this.setState({teamInPossession: teamWithPossession, defendingTeam: defendingTeam, team1PossessionPercentage: team1Possession, team2PossessionPercentage: team2Possession}, () => {
-      this.setState({commentary: this.state.teamInPossession.name + " in possession", possessionFontColor: possessionFontColor , possessionBackgroundColor: possessionBackgroundColor});
-      console.log(this.state.teamInPossession.name + " in possession")
+    this.setState({teamInPossession: thisTeamInPossession[0], defendingTeam: defendingTeam, team1PossessionPercentage: possessionStats[0], team2PossessionPercentage: possessionStats[1]}, () => {
+      this.setState({commentary: this.state.teamInPossession.name + " in possession", possessionFontColor: thisTeamInPossession[1] , possessionBackgroundColor: thisTeamInPossession[2]});
       this.setPlayerinPossession()
     });
   }
