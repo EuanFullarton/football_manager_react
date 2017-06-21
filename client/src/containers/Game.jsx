@@ -49,8 +49,11 @@ class Game extends React.Component {
         const teams = JSON.parse(request.responseText);
         const team1 = teams[0];
         const team2 = teams[1];
-        this.setState({teams: [team1, team2], teamBadge: [team1.badge, team2.badge]});
-        this.setState({commentary: ('Match about to begin: ' + this.state.teams[0].name + " vs " + this.state.teams[1].name)});
+        this.setState({
+          teams: [team1, team2], 
+          teamBadge: [team1.badge, team2.badge]});
+        this.setState({
+          commentary: ('Match about to begin: ' + this.state.teams[0].name + " vs " + this.state.teams[1].name)});
         console.log('Match about to begin: ', this.state.teams[0].name, "vs", this.state.teams[1].name)
       }
       else{
@@ -77,10 +80,18 @@ class Game extends React.Component {
 
     const possessionStats = findTeamInPossession.calculate(this.state.team1Possession, this.state.team2Possession); 
 
-    this.setState({teamInPossession: thisTeamInPossession[0], defendingTeam: defendingTeam, team1PossessionPercentage: possessionStats[0], team2PossessionPercentage: possessionStats[1]}, () => {
-      this.setState({commentary: this.state.teamInPossession.name + " in possession", possessionFontColor: thisTeamInPossession[1] , possessionBackgroundColor: thisTeamInPossession[2]});
-      this.setPlayerinPossession()
-    });
+    this.setState({
+      teamInPossession: thisTeamInPossession[0], 
+      defendingTeam: defendingTeam, 
+      team1PossessionPercentage: possessionStats[0], 
+      team2PossessionPercentage: possessionStats[1]}, () => {
+
+        this.setState({
+          commentary: this.state.teamInPossession.name + " in possession", possessionFontColor: thisTeamInPossession[1], 
+          possessionBackgroundColor: thisTeamInPossession[2]});
+        
+        this.setPlayerinPossession()
+      });
   }
 
   setPlayerinPossession(){
@@ -146,70 +157,88 @@ class Game extends React.Component {
     const defendingTeam = this.state.defendingTeam;
     const passResult = thisPass.passSuccess(passingPlayer, receivingPlayer, defendingPlayer, teamInPossession, defendingTeam);
 
-    this.setState({teamInPossession: passResult[0], defendingTeam: passResult[1], playerInPossession:passResult[2]}, () => {
+    this.setState({
+      teamInPossession: passResult[0], 
+      defendingTeam: passResult[1], 
+      playerInPossession:passResult[2]}, () => {
 
-      if (this.state.teamInPossession !== teamInPossession){
-        const miss = document.getElementById("miss");
-        miss.play();
-      }
-
-      const stats = new MatchStats();
-      const totalPossession = ((this.state.team1Possession) + (this.state.team2Possession));
-      const possessionPercentageReturns = stats.calculatePercentage(this.state.team1Possession, totalPossession);
-      const team1Possession = possessionPercentageReturns[0];
-      const team2Possession = possessionPercentageReturns[1];
-
-      if (this.state.teamInPossession === this.state.teams[0]){
-
-        const totalPasses = ((this.state.team1Passes + 1) + (this.state.team2Passes));
-
-        const passingPercentageReturns = stats.calculatePercentage(this.state.team1Passes + 1, totalPasses);
-        const team1PassingPercentage = passingPercentageReturns[0];
-        const team2PassingPercentage = passingPercentageReturns[1];
-
-        this.setState({team1Possession: (this.state.team1Possession + 1), team1PossessionPercentage: team1Possession, team2PossessionPercentage: team2Possession, team1Passes: (this.state.team1Passes + 1), team1PassingPercentage: team1PassingPercentage, team2PassingPercentage: team2PassingPercentage},() => {
-        });
-
-      }
-      else {
-
-        const totalPasses = ((this.state.team1Passes) + (this.state.team2Passes + 1));
-
-        const passingPercentageReturns = stats.calculatePercentage(this.state.team1Passes, totalPasses);
-        const team1PassingPercentage = passingPercentageReturns[0];
-        const team2PassingPercentage = passingPercentageReturns[1];
-
-        this.setState({team2Possession: (this.state.team2Possession + 1), team1PossessionPercentage: team1Possession, team2PossessionPercentage: team2Possession, team2Passes:(this.state.team2Passes + 1), team1PassingPercentage: team1PassingPercentage, team2PassingPercentage: team2PassingPercentage}, () => {
-        });
-      }
-
-      if (((this.state.gameTime < 45) && (this.state.half === "first")) || (this.state.gameTime < 90) && (this.state.half === "second")){
-        this.setState({gameTime: (this.state.gameTime += 1)});
-      }
-
-      let thisCommentary = passResult[3];
-      const possessionFontColor = this.state.teamInPossession.fontColor;
-      const possessionBackgroundColor = this.state.teamInPossession.backgroundColor;
-
-      this.setState({commentary: thisCommentary, possessionFontColor: possessionFontColor , possessionBackgroundColor: possessionBackgroundColor}, () => {
-
-        const players = this.state.teamInPossession.players;
-        const indexOfPlayerWithPossession = players.indexOf(this.state.playerInPossession)
-        const playerWithPossession = this.state.playerInPossession;
-        const newDefendingPlayer = this.state.defendingTeam.players[(Math.floor(Math.random() * this.state.defendingTeam.players.length))];
-
-        let removedPlayer = players.splice(indexOfPlayerWithPossession, 1);
-        const newReceivingPlayer = players[(Math.floor(Math.random() * players.length))];
-
-        if (newReceivingPlayer === playerWithPossession){
-          newReceivingPlayer = players[(Math.floor(Math.random() * players.length))];
+        if (this.state.teamInPossession !== teamInPossession){
+          const miss = document.getElementById("miss");
+          miss.play();
         }
 
-        players.push(removedPlayer[0])
+        const stats = new MatchStats();
+        const totalPossession = ((this.state.team1Possession) + (this.state.team2Possession));
+        const possessionPercentageReturns = stats.calculatePercentage(this.state.team1Possession, totalPossession);
+        const team1Possession = possessionPercentageReturns[0];
+        const team2Possession = possessionPercentageReturns[1];
 
-        this.attackingMove(this.state.playerInPossession, newReceivingPlayer, newDefendingPlayer);
-      });     
-    });
+        if (this.state.teamInPossession === this.state.teams[0]){
+
+          const totalPasses = ((this.state.team1Passes + 1) + (this.state.team2Passes));
+
+          const passingPercentageReturns = stats.calculatePercentage(this.state.team1Passes + 1, totalPasses);
+          const team1PassingPercentage = passingPercentageReturns[0];
+          const team2PassingPercentage = passingPercentageReturns[1];
+
+          this.setState({
+            team1Possession: (this.state.team1Possession + 1), 
+            team1PossessionPercentage: team1Possession, 
+            team2PossessionPercentage: team2Possession, 
+            team1Passes: (this.state.team1Passes + 1), 
+            team1PassingPercentage: team1PassingPercentage, 
+            team2PassingPercentage: team2PassingPercentage}, () => {
+            });
+
+        }
+        else {
+
+          const totalPasses = ((this.state.team1Passes) + (this.state.team2Passes + 1));
+
+          const passingPercentageReturns = stats.calculatePercentage(this.state.team1Passes, totalPasses);
+          const team1PassingPercentage = passingPercentageReturns[0];
+          const team2PassingPercentage = passingPercentageReturns[1];
+
+          this.setState({
+            team2Possession: (this.state.team2Possession + 1), 
+            team1PossessionPercentage: team1Possession, 
+            team2PossessionPercentage: team2Possession, 
+            team2Passes:(this.state.team2Passes + 1), 
+            team1PassingPercentage: team1PassingPercentage, 
+            team2PassingPercentage: team2PassingPercentage}, () => {
+            });
+        }
+
+        if (((this.state.gameTime < 45) && (this.state.half === "first")) || (this.state.gameTime < 90) && (this.state.half === "second")){
+          this.setState({gameTime: (this.state.gameTime += 1)});
+        }
+
+        let thisCommentary = passResult[3];
+        const possessionFontColor = this.state.teamInPossession.fontColor;
+        const possessionBackgroundColor = this.state.teamInPossession.backgroundColor;
+
+        this.setState({
+          commentary: thisCommentary, 
+          possessionFontColor: possessionFontColor, 
+          possessionBackgroundColor: possessionBackgroundColor}, () => {
+
+          const players = this.state.teamInPossession.players;
+          const indexOfPlayerWithPossession = players.indexOf(this.state.playerInPossession)
+          const playerWithPossession = this.state.playerInPossession;
+          const newDefendingPlayer = this.state.defendingTeam.players[(Math.floor(Math.random() * this.state.defendingTeam.players.length))];
+
+          let removedPlayer = players.splice(indexOfPlayerWithPossession, 1);
+          const newReceivingPlayer = players[(Math.floor(Math.random() * players.length))];
+
+          if (newReceivingPlayer === playerWithPossession){
+            newReceivingPlayer = players[(Math.floor(Math.random() * players.length))];
+          }
+
+          players.push(removedPlayer[0])
+
+          this.attackingMove(this.state.playerInPossession, newReceivingPlayer, newDefendingPlayer);
+        });     
+      });
   }
 
   attackingMove(playerInPossession, receivingPlayer, defendingPlayer){
@@ -270,29 +299,42 @@ class Game extends React.Component {
       const team2ShootingPercentage = shootingPercentageReturns[1];
 
 
-      this.setState({team1Score: (this.state.team1Score + 1), team1Scorers: this.state.team1Scorers + " " + shotResult[2] + ", " + this.state.gameTime, team1Shots: (this.state.team1Shots + 1), team1ShotsPercentage: team1ShootingPercentage, team2ShotsPercentage: team2ShootingPercentage}, () => {
+      this.setState({
+        team1Score: (this.state.team1Score + 1), 
+        team1Scorers: this.state.team1Scorers + " " + shotResult[2] + ", " + this.state.gameTime, 
+        team1Shots: (this.state.team1Shots + 1), 
+        team1ShotsPercentage: team1ShootingPercentage, 
+        team2ShotsPercentage: team2ShootingPercentage}, () => {
 
-        setTimeout(function(){
-          let thisCommentary = "*****GOAALLLLL*****";
-          console.log("*****GOAALLLLL*****");
-          this.setState({commentary: thisCommentary}, () => {
+          setTimeout(function(){
+            let thisCommentary = "*****GOAALLLLL*****";
+            console.log("*****GOAALLLLL*****");
+            this.setState({commentary: thisCommentary}, () => {
 
 
-            const possessionFontColor = this.state.teamInPossession.fontColor;
-            const possessionBackgroundColor = this.state.teamInPossession.backgroundColor;
+              const possessionFontColor = this.state.teamInPossession.fontColor;
+              const possessionBackgroundColor = this.state.teamInPossession.backgroundColor;
 
-            //trying to make goals flash
+            //goal flash
             setTimeout(function(){
-              this.setState({possessionFontColor: possessionBackgroundColor, possessionBackgroundColor: possessionFontColor})
+              this.setState({
+                possessionFontColor: possessionBackgroundColor, 
+                possessionBackgroundColor: possessionFontColor})
             }.bind(this), 100);
             setTimeout(function(){
-              this.setState({possessionFontColor: possessionFontColor, possessionBackgroundColor: possessionBackgroundColor})
+              this.setState({
+                possessionFontColor: possessionFontColor, 
+                possessionBackgroundColor: possessionBackgroundColor})
             }.bind(this), 200);
             setTimeout(function(){
-              this.setState({possessionFontColor: possessionBackgroundColor, possessionBackgroundColor: possessionFontColor})
+              this.setState({
+                possessionFontColor: possessionBackgroundColor, 
+                possessionBackgroundColor: possessionFontColor})
             }.bind(this), 300);
             setTimeout(function(){
-              this.setState({possessionFontColor: possessionFontColor, possessionBackgroundColor: possessionBackgroundColor})
+              this.setState({
+                possessionFontColor: possessionFontColor, 
+                possessionBackgroundColor: possessionBackgroundColor})
             }.bind(this), 400);
 
 
@@ -319,8 +361,8 @@ class Game extends React.Component {
               });
             }.bind(this), 1500);
           });
-        }.bind(this), 500);
-      });
+          }.bind(this), 500);
+        });
     }
     else if ((shotResult[0] === true) &&(this.state.teamInPossession === this.state.teams[1])){
 
@@ -334,28 +376,41 @@ class Game extends React.Component {
       const team2ShootingPercentage = shootingPercentageReturns[1];
 
 
-      this.setState({team2Score: (this.state.team2Score + 1), team2Scorers: this.state.team2Scorers + " " + shotResult[2] + ", " + this.state.gameTime, team2Shots: (this.state.team2Shots + 1), team1ShotsPercentage: team1ShootingPercentage, team2ShotsPercentage: team2ShootingPercentage}, () => {
+      this.setState({
+        team2Score: (this.state.team2Score + 1), 
+        team2Scorers: this.state.team2Scorers + " " + shotResult[2] + ", " + this.state.gameTime, 
+        team2Shots: (this.state.team2Shots + 1), 
+        team1ShotsPercentage: team1ShootingPercentage, 
+        team2ShotsPercentage: team2ShootingPercentage}, () => {
 
-        setTimeout(function(){
-          let thisCommentary = "*****GOAALLLLL*****";
-          console.log("*****GOAALLLLL*****");
-          this.setState({commentary: thisCommentary}, () => {
+          setTimeout(function(){
+            let thisCommentary = "*****GOAALLLLL*****";
+            console.log("*****GOAALLLLL*****");
+            this.setState({commentary: thisCommentary}, () => {
 
-            const possessionFontColor = this.state.teamInPossession.fontColor;
-            const possessionBackgroundColor = this.state.teamInPossession.backgroundColor;
+              const possessionFontColor = this.state.teamInPossession.fontColor;
+              const possessionBackgroundColor = this.state.teamInPossession.backgroundColor;
 
-            //trying to make goals flash
+            //goal flash
             setTimeout(function(){
-              this.setState({possessionFontColor: possessionBackgroundColor, possessionBackgroundColor: possessionFontColor})
+              this.setState({
+                possessionFontColor: possessionBackgroundColor, 
+                possessionBackgroundColor: possessionFontColor})
             }.bind(this), 100);
             setTimeout(function(){
-              this.setState({possessionFontColor: possessionFontColor, possessionBackgroundColor: possessionBackgroundColor})
+              this.setState({
+                possessionFontColor: possessionFontColor, 
+                possessionBackgroundColor: possessionBackgroundColor})
             }.bind(this), 200);
             setTimeout(function(){
-              this.setState({possessionFontColor: possessionBackgroundColor, possessionBackgroundColor: possessionFontColor})
+              this.setState({
+                possessionFontColor: possessionBackgroundColor, 
+                possessionBackgroundColor: possessionFontColor})
             }.bind(this), 300);
             setTimeout(function(){
-              this.setState({possessionFontColor: possessionFontColor, possessionBackgroundColor: possessionBackgroundColor})
+              this.setState({
+                possessionFontColor: possessionFontColor, 
+                possessionBackgroundColor: possessionBackgroundColor})
             }.bind(this), 400);
 
 
@@ -387,9 +442,9 @@ class Game extends React.Component {
               });
             }.bind(this), 1500);
           });
-        }.bind(this), 500);
+          }.bind(this), 500);
 
-      });
+        });
     }
     else {
 
@@ -411,7 +466,14 @@ class Game extends React.Component {
         const team1ShootingPercentage = shootingPercentageReturns[0];
         const team2ShootingPercentage = shootingPercentageReturns[1];
 
-        this.setState({teamInPossession: this.state.teams[1], team2Possession: (this.state.team2Possession + 1), team1PossessionPercentage: team1Possession, team2PossessionPercentage: team2Possession, team1Shots: (this.state.team1Shots + 1), team1ShotsPercentage: team1ShootingPercentage, team2ShotsPercentage: team2ShootingPercentage})
+        this.setState({
+          teamInPossession: this.state.teams[1], 
+          team2Possession: (this.state.team2Possession + 1), 
+          team1PossessionPercentage: team1Possession, 
+          team2PossessionPercentage: team2Possession, 
+          team1Shots: (this.state.team1Shots + 1), 
+          team1ShotsPercentage: team1ShootingPercentage, 
+          team2ShotsPercentage: team2ShootingPercentage})
       }
       else{
         const totalShots = ((this.state.team1Shots) + (this.state.team2Shots + 1));
@@ -420,7 +482,14 @@ class Game extends React.Component {
         const team1ShootingPercentage = shootingPercentageReturns[0];
         const team2ShootingPercentage = shootingPercentageReturns[1];
         
-        this.setState({teamInPossession: this.state.teams[0], team1Possession: (this.state.team1Possession + 1), team1PossessionPercentage: team1Possession, team2PossessionPercentage: team2Possession, team2Shots: (this.state.team2Shots + 1), team1ShotsPercentage: team1ShootingPercentage, team2ShotsPercentage: team2ShootingPercentage})
+        this.setState({
+          teamInPossession: this.state.teams[0], 
+          team1Possession: (this.state.team1Possession + 1), 
+          team1PossessionPercentage: team1Possession, 
+          team2PossessionPercentage: team2Possession, 
+          team2Shots: (this.state.team2Shots + 1), 
+          team1ShotsPercentage: team1ShootingPercentage, 
+          team2ShotsPercentage: team2ShootingPercentage})
       }
 
       const possessionFontColor = this.state.teamInPossession.fontColor;
@@ -428,7 +497,10 @@ class Game extends React.Component {
 
       let thisCommentary = (shotResult[1]);
       console.log(shotResult[1]);
-      this.setState({commentary: thisCommentary, possessionFontColor: possessionFontColor , possessionBackgroundColor: possessionBackgroundColor});
+      this.setState({
+        commentary: thisCommentary, 
+        possessionFontColor: possessionFontColor, 
+        possessionBackgroundColor: possessionBackgroundColor});
 
       this.timeElapse();  
       this.goalKick();
@@ -502,7 +574,10 @@ class Game extends React.Component {
     setTimeout(function(){
       let thisCommentary = ("Back to centre");
       console.log("Back to centre");
-      this.setState({commentary: thisCommentary, possessionFontColor: possessionFontColor , possessionBackgroundColor: possessionBackgroundColor});
+      this.setState({
+        commentary: thisCommentary, 
+        possessionFontColor: possessionFontColor, 
+        possessionBackgroundColor: possessionBackgroundColor});
     }.bind(this), 3000);
     return;
   }
@@ -524,7 +599,12 @@ class Game extends React.Component {
       const whistle = document.getElementById("startWhistle");
       whistle.play();
       playCrowd.pause();
-      this.setState({gameTime: 45, commentary: "Half time", possessionFontColor: 'white' , possessionBackgroundColor: 'black', half: "second"})
+      this.setState({
+        gameTime: 45, 
+        commentary: "Half time", 
+        possessionFontColor: 'white', 
+        possessionBackgroundColor: 'black', 
+        half: "second"})
       console.log("*****Half time!*****");
     }.bind(this), 4000);
     return;
@@ -534,7 +614,10 @@ class Game extends React.Component {
     setTimeout(function(){
       const finalWhistle = document.getElementById("finalWhistle");
       finalWhistle.play();
-      this.setState({commentary: "Final whistle", possessionFontColor: 'white' , possessionBackgroundColor: 'black'})
+      this.setState({
+        commentary: "Final whistle", 
+        possessionFontColor: 'white', 
+        possessionBackgroundColor: 'black'})
       console.log("*****There's the final whistle, the game has ended: Real Madrid ", this.state.team1Score + " - Barcelona " + this.state.team2Score + "*****");
       const playCrowd = document.getElementById("audio");
       playCrowd.pause();
