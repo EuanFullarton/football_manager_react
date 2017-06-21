@@ -315,27 +315,7 @@ class Game extends React.Component {
               const possessionFontColor = this.state.teamInPossession.fontColor;
               const possessionBackgroundColor = this.state.teamInPossession.backgroundColor;
 
-            //goal flash
-            setTimeout(function(){
-              this.setState({
-                possessionFontColor: possessionBackgroundColor, 
-                possessionBackgroundColor: possessionFontColor})
-            }.bind(this), 100);
-            setTimeout(function(){
-              this.setState({
-                possessionFontColor: possessionFontColor, 
-                possessionBackgroundColor: possessionBackgroundColor})
-            }.bind(this), 200);
-            setTimeout(function(){
-              this.setState({
-                possessionFontColor: possessionBackgroundColor, 
-                possessionBackgroundColor: possessionFontColor})
-            }.bind(this), 300);
-            setTimeout(function(){
-              this.setState({
-                possessionFontColor: possessionFontColor, 
-                possessionBackgroundColor: possessionBackgroundColor})
-            }.bind(this), 400);
+           this.goalFlash();
 
 
             setTimeout(function(){
@@ -391,27 +371,7 @@ class Game extends React.Component {
               const possessionFontColor = this.state.teamInPossession.fontColor;
               const possessionBackgroundColor = this.state.teamInPossession.backgroundColor;
 
-            //goal flash
-            setTimeout(function(){
-              this.setState({
-                possessionFontColor: possessionBackgroundColor, 
-                possessionBackgroundColor: possessionFontColor})
-            }.bind(this), 100);
-            setTimeout(function(){
-              this.setState({
-                possessionFontColor: possessionFontColor, 
-                possessionBackgroundColor: possessionBackgroundColor})
-            }.bind(this), 200);
-            setTimeout(function(){
-              this.setState({
-                possessionFontColor: possessionBackgroundColor, 
-                possessionBackgroundColor: possessionFontColor})
-            }.bind(this), 300);
-            setTimeout(function(){
-              this.setState({
-                possessionFontColor: possessionFontColor, 
-                possessionBackgroundColor: possessionBackgroundColor})
-            }.bind(this), 400);
+            this.goalFlash();
 
 
             setTimeout(function(){
@@ -505,6 +465,30 @@ class Game extends React.Component {
       this.timeElapse();  
       this.goalKick();
     }
+  }
+
+  goalFlash(){
+    setTimeout(function(){
+      this.setState({
+        possessionFontColor: this.state.possessionBackgroundColor, 
+        possessionBackgroundColor: this.state.possessionFontColor})
+    }.bind(this), 200);
+    setTimeout(function(){
+      this.setState({
+        possessionFontColor: this.state.possessionFontColor, 
+        possessionBackgroundColor: this.state.possessionBackgroundColor})
+    }.bind(this), 400);
+    setTimeout(function(){
+      this.setState({
+        possessionFontColor: this.state.possessionBackgroundColor, 
+        possessionBackgroundColor: this.state.possessionFontColor})
+    }.bind(this), 600);
+    setTimeout(function(){
+      this.setState({
+        possessionFontColor: this.state.possessionFontColor, 
+        possessionBackgroundColor: this.state.possessionBackgroundColor})
+    }.bind(this), 800);
+
   }
 
   gameStart(){

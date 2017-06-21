@@ -19,10 +19,7 @@ class Shot {
       const thisSave = saves[(Math.floor(Math.random() * saves.length))];
       return [false, thisSave];
     }
-
-
   }
-
 }
 
 export default Shot;
